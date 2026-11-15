@@ -1,0 +1,20 @@
+# Zugangsdaten und Geheimnisse
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Laufzeitdaten
+data/
+logs/
+backup/
+backups/
+
+# Datenbanken
+*.sqlite3
+*.db

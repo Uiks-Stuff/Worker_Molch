@@ -1,0 +1,18 @@
+services:
+  discord-bot:
+    build: .
+    container_name: discord-bot
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      # Die Modulkonfiguration wird von /module enable und /module disable geändert.
+      - ./config:/app/config
+      # Neue/geänderte Funktionsmodule können ohne Image-Neubau geladen werden.
+      - ./modules:/app/modules:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+    stop_grace_period: 30s
