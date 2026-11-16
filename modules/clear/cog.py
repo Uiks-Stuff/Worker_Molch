@@ -28,7 +28,7 @@ class ClearResult:
 
 async def _delete_one(message: discord.Message, reason: str) -> tuple[int, int]:
     try:
-        await message.delete(reason=reason)
+        await message.delete()
         return 1, 0
     except discord.NotFound:
         # Die Nachricht wurde zwischenzeitlich bereits entfernt.
