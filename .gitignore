@@ -18,3 +18,7 @@ backups/
 # Datenbanken
 *.sqlite3
 *.db
+
+# Claude-Workflow
+.claude/weiter.log
+STOP
