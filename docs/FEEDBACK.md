@@ -32,6 +32,12 @@ T5 - 6. passt, funktioniert
 T5 - 7. kann nicht getestet werden, Manage Message betrifft nur Nachrichten anderer User
 T5 - Optional entfällt
 
+T6 - 1. passt
+T6 - 2. passt
+T6 - 3. passt
+T6 - 4. passt
+T6 - 5. passt
+
 T7 - 1. passt
 T7 - 2. passt
 T7 - 3. passt, nur mit richtiger rolle kann ich diese lesen
@@ -41,12 +47,6 @@ T7 - 6. Ban schlägt nicht fehl, wird gebannt, ist nicht weiter schlimm
 T7 - 7. passt
 T7 - 8. passt
 T7 - Optinal: passt
-
-T6 - 1. passt
-T6 - 2. passt
-T6 - 3. passt
-T6 - 4. passt
-T6 - 5. passt
 
 T8 - 1. lange offline nach restart -> Log:
 discord-bot  | 2026-11-18 21:02:14,565 | WARNING | discord.client | PyNaCl is not installed, voice will NOT be supported
