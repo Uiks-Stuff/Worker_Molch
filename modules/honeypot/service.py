@@ -19,6 +19,9 @@ BAN_REASON = "Honeypot: Nachricht im überwachten Channel"
 DELETE_MESSAGE_SECONDS = 3600
 # So lange wird ein User nach einem Bann(versuch) nicht erneut behandelt (Nachrichten, die schon unterwegs sind).
 RECENT_SECONDS = 60
+LOG_THREAD_NAME = "honeypot-log"
+# Embed-Feldwerte sind auf 1024 Zeichen begrenzt.
+LOG_CONTENT_LIMIT = 1000
 
 
 @dataclass
@@ -110,7 +113,66 @@ class HoneypotService:
     async def _log_event(
         self, guild: discord.Guild, snapshot: MessageSnapshot, banned: bool, error: str | None = None
     ) -> None:
-        """Ereignislog im Thread (Aufgabe 12)."""
+        """Schreibt einen Eintrag in den privaten Log-Thread. Fehler werden nur geloggt."""
+        try:
+            settings = self.storage.load(guild.id)
+            channel = guild.get_channel(settings["channel_id"]) if settings["channel_id"] else None
+            if channel is None:
+                return
+            thread = await self._get_log_thread(guild, channel, settings)
+            await thread.send(
+                embed=self._build_log_embed(snapshot, banned, error),
+                allowed_mentions=discord.AllowedMentions.none(),
+            )
+        except Exception:
+            logger.exception("Log-Eintrag in Guild %s konnte nicht geschrieben werden.", guild.id)
+
+    async def _get_log_thread(
+        self, guild: discord.Guild, channel: discord.TextChannel, settings: dict
+    ) -> discord.Thread:
+        """Gespeicherten Log-Thread holen (auch archiviert), sonst privaten Thread neu anlegen."""
+        thread_id = settings["log_thread_id"]
+        if thread_id:
+            thread = guild.get_thread(thread_id)
+            if thread is None:
+                try:
+                    fetched = await guild.fetch_channel(thread_id)
+                    thread = fetched if isinstance(fetched, discord.Thread) else None
+                except discord.NotFound:
+                    thread = None
+            if thread is not None:
+                return thread
+
+        thread = await channel.create_thread(
+            name=LOG_THREAD_NAME,
+            type=discord.ChannelType.private_thread,
+            invitable=False,
+            reason="Honeypot-Ereignislog",
+        )
+        self.storage.update(guild.id, log_thread_id=thread.id)
+        return thread
+
+    @staticmethod
+    def _build_log_embed(snapshot: MessageSnapshot, banned: bool, error: str | None) -> discord.Embed:
+        embed = discord.Embed(
+            title="User gebannt" if banned else "Bann fehlgeschlagen",
+            colour=discord.Colour.red() if banned else discord.Colour.orange(),
+            timestamp=snapshot.created_at,
+        )
+        embed.add_field(name="User-ID", value=str(snapshot.user_id), inline=True)
+        embed.add_field(name="Name", value=snapshot.user_name[:256] or "unbekannt", inline=True)
+        embed.add_field(name="Banngrund", value=BAN_REASON if banned else f"{BAN_REASON}\nFehler: {error}"[:1024], inline=False)
+
+        content = snapshot.content
+        if not content:
+            content = "(kein Text)"
+        elif len(content) > LOG_CONTENT_LIMIT:
+            content = content[: LOG_CONTENT_LIMIT - 1] + "…"
+        embed.add_field(name="Nachricht", value=content, inline=False)
+        if snapshot.attachment_count:
+            embed.add_field(name="Anhänge", value=f"{snapshot.attachment_count} (nicht gespeichert)", inline=True)
+        embed.add_field(name="Zeitpunkt", value=discord.utils.format_dt(snapshot.created_at, "F"), inline=True)
+        return embed
 
     async def _record_ban(self, guild: discord.Guild) -> None:
         """Zähler erhöhen und Infonachricht aktualisieren. Fehler brechen nichts ab (Bann ist schon erfolgt)."""

@@ -49,6 +49,20 @@ Mitglieder bannen, @everyone erwähnen, Private Threads erstellen, In Threads se
 8. Optional: Bot-Rechte wieder geben; Infonachricht von Hand löschen und `/honeypot stop` + `/honeypot start` → Nachricht kommt ohne Ping neu.
 - Erwartet: wie beschrieben.
 
+## T7 – Bann, Log-Thread und Zähler (Aufgaben 10–12)
+Einspielen: `/module reload honeypot`. Du brauchst einen **Test-Account** (Zweit-Account, ohne Moderator-Recht und ohne Save-Role) – er wird wirklich gebannt (danach Bann aufheben).
+Der Bot muss in der Rollenhierarchie über dem Test-Account stehen. Überwachung muss aktiv sein (`/honeypot start`).
+1. Mit Test-Account im Honeypot-Channel eine Nachricht schreiben → Account ist sofort gebannt, seine Nachricht ist weg (auch Nachrichten der letzten Stunde in anderen Channels).
+2. Infonachricht zeigt „Bans: 1“ (bearbeitet, kein neuer Ping).
+3. Im Honeypot-Channel existiert ein privater Thread „honeypot-log“; als Moderator (mit „Threads verwalten“) sichtbar, für normale User nicht. Eintrag: User-ID, Name, Banngrund, Nachricht, Zeitpunkt.
+4. Bann des Test-Accounts aufheben, ihn wieder einladen. `/honeypot setrole` mit einer Rolle des Test-Accounts, erneut schreiben → KEIN Bann.
+5. Als Moderator/Admin selbst im Honeypot-Channel schreiben → KEIN Bann. `/honeypot stop` und mit Test-Account (ohne Save-Role) schreiben → KEIN Bann.
+6. Test-Account mit Rolle **über** der Bot-Rolle (oder Server-Owner-Test nicht möglich) → Bann schlägt fehl: Eintrag „Bann fehlgeschlagen“ mit Fehler im Log-Thread, Zähler steigt nicht.
+7. Nachricht im Log-Thread schreiben (als Moderator) → keine Reaktion.
+8. Honeypot-Channel löschen → `/honeypot status`: Überwachung inaktiv, Channel nicht gesetzt.
+9. Optional: Log-Thread löschen, neuen Bann auslösen → Thread wird neu angelegt.
+- Erwartet: wie beschrieben.
+
 ## T6 – `/honeypot setlanguage` (Aufgabe 9)
 Einspielen: `/module reload honeypot`. Voraussetzung: Überwachung aktiv (T5).
 1. `/honeypot setlanguage language:` tippen → Autocomplete schlägt DEUTSCH und ENGLISH vor.

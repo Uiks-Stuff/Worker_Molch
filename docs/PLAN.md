@@ -70,7 +70,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   2 Nachrichten gleichzeitig → 1 Ban, Forbidden, Channel gelöscht.
 - [x] **11. Zähler + Info-Update (A1/A6)**: nach erfolgreichem Bann `ban_count += 1`, speichern, Infonachricht aktualisieren.
   *Abnahme:* Test: Zähler nur bei Erfolg, Info-Fehler bricht nicht ab.
-- [ ] **12. Log-Thread (A5/A7)**: privater Thread „honeypot-log“ (`invitable=False`) anlegen bzw. per ID holen (`get_thread` → `fetch_channel`, archiviert ok);
+- [x] **12. Log-Thread (A5/A7)**: privater Thread „honeypot-log“ (`invitable=False`) anlegen bzw. per ID holen (`get_thread` → `fetch_channel`, archiviert ok);
   Eintrag als Embed (User-ID, Name, Grund, Nachricht gekürzt auf Limit, Anhänge-Anzahl, Zeit); fehlgeschlagener Bann ebenfalls. Log-Fehler verhindert Bann nicht.
   *Abnahme:* Tests: Thread neu/vorhanden/gelöscht → neu, Inhalt, Kürzung, leerer Inhalt, Log-Fehler.
 - [ ] **13. Neustart/Reload + Integration (A1/A7)**: Mock-Ablauf start → Nachricht → Bann → Log → Zähler → Infonachricht; neues Cog mit gleicher Datei kennt Zustand.

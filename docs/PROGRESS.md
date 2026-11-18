@@ -27,8 +27,10 @@ STATUS: ARBEITET
 
 - Aufgabe 11: `service._record_ban` (Zähler +1, Info-Update, Fehler abgefangen), 6 Tests in `tests/test_honeypot_counter.py`.
 
+- Aufgabe 12: `service._log_event`/`_get_log_thread`/`_build_log_embed`, 11 Tests in `tests/test_honeypot_log.py` (T7 für 10–12 offen).
+
 ## Nächster Schritt
-- Aufgabe 12 (Log-Thread: `service._log_event(guild, snapshot, banned, error=None)` implementieren, privater Thread „honeypot-log“, Embed).
+- Aufgabe 13 (Integrationstest Mock-Ablauf start → Nachricht → Bann → Log → Zähler → Info; neues Cog mit gleicher Datei kennt Zustand).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
