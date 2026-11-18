@@ -1,5 +1,6 @@
 {
   "enabled_modules": [
-    "modules.clear.cog"
+    "modules.clear.cog",
+    "modules.honeypot.cog"
   ]
 }

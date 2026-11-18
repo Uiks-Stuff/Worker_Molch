@@ -1,9 +1,14 @@
 [DEUTSCH]
- - @everyone Hallo! Dieser Channel ist dafür da um jeden Scammer direkt zu bannen der auf dem Server was versucht! Das heißt jeder User der in diesen Channel schreibt, wird direkt GEBANNT
+ - @everyone Hallo! Dieser Channel ist dafür da um jeden Scammer direkt zu bannen der auf dem Server was versucht! Das heißt jeder User der in diesen Channel schreibt, wird direkt GEBANNT!
  - Bans: X
  - Honeypot under construction
 
 [ENGLISH]
- - @everyone Hello! This channel exists to ban every scammer on the spot who tries something on this server! That means every user who writes in this channel will be BANNED immediately
+ - @everyone Hello! This channel exists to ban every scammer on the spot who tries something on this server! That means every user who writes in this channel will be BANNED immediately!
  - Bans: X
  - Honeypot under construction
+ 
+[FRANCAIS]
+- @everyone Bonjour! Ce canal a pour but de bannir immédiatement tout arnaqueur qui tente quoi que ce soit sur ce serveur! Cela signifie que tout utilisateur qui écrit dans ce canal sera banni immédiatement!
+- Interdictions: X
+- Honeypot en construction
