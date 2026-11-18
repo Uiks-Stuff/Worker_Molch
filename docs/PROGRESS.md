@@ -5,7 +5,7 @@ STATUS: ARBEITET
 - Test-Setup: `requirements-dev.txt`, `pytest.ini`, `tests/test_smoke.py` (6 Tests, grün).
 
 ## Nächster Schritt
-- Nutzer-Antworten eingearbeitet. Nach Freigabe: Aufgabe 1 (Core-Intents in `main.py`).
+- Plan final abgestimmt. Aufgabe 1 (Core-Intents in `main.py`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
@@ -24,8 +24,8 @@ STATUS: ARBEITET
 - `@everyone` pingt einmalig beim Aufsetzen; nicht nach Neustart, beim Bearbeiten oder wenn Nachricht existiert (Nutzer bestätigt).
   Gelöschte Infonachricht wird ohne Ping neu gesendet.
 - Bann sofort, danach Honeypot-Nachricht sofort löschen (Nutzer). Zusätzlich `delete_message_seconds=3600`
-  (entfernt Spam des Users der letzten Stunde serverweit) – Annahme, bei Bedarf auf 0 setzen.
+  (entfernt Spam des Users der letzten Stunde serverweit) (Nutzer bestätigt).
 - `stop`: Infonachricht bekommt Zusatz aus Zeile 3 der Sprachdatei (Standard „Honeypot under construction“) (Nutzer).
-- Infonachricht wird erst bei `start` gepostet, nicht schon bei `/honeypot channel` im inaktiven Zustand.
+- Infonachricht wird erst bei `start` gepostet, nicht schon bei `/honeypot channel` im inaktiven Zustand. (Nutzer bestätigt)
 - Channel entfernt/gelöscht → Überwachung aus.
 - Mehrere Nachrichten eines Users → nur ein Bann, Zähler +1.
