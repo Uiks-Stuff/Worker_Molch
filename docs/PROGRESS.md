@@ -10,8 +10,10 @@ STATUS: ARBEITET
 
 - Aufgabe 3: `languages.txt` (DEUTSCH, ENGLISH), `languages.py` (`get_language`, `resolve_language`, `render_info`), 11 Tests.
 
+- Aufgabe 4: `cog.py` (`Honeypot` GroupCog, status fertig, übrige 6 Befehle als Platzhalter „noch nicht verfügbar“), 7 Tests (T2 offen).
+
 ## Nächster Schritt
-- Aufgabe 4 (`cog.py` GroupCog + `/honeypot status`, Smoke-Test Extension laden).
+- Aufgabe 5 (`setrole`/`removerole` in `cog.py`, Platzhalter ersetzen, Parameter `rolle1`–`rolle5`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
