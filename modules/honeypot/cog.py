@@ -7,6 +7,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from .languages import resolve_language, LanguageError
+from .service import HoneypotService
 from .storage import HoneypotStorage
 
 logger = logging.getLogger("discordbot.honeypot")
@@ -20,6 +21,7 @@ class Honeypot(commands.GroupCog, name="honeypot", description="Honeypot-Channel
     def __init__(self, bot: commands.Bot, storage: HoneypotStorage | None = None) -> None:
         self.bot = bot
         self.storage = storage or HoneypotStorage()
+        self.service = HoneypotService(bot, self.storage)
         super().__init__()
 
     # ------------------------------------------------------------------ status
@@ -61,10 +63,41 @@ class Honeypot(commands.GroupCog, name="honeypot", description="Honeypot-Channel
     async def stop(self, interaction: discord.Interaction) -> None:
         await interaction.response.send_message(NOT_IMPLEMENTED, ephemeral=True)
 
-    @app_commands.command(name="channel", description="Setzt den überwachten Channel.")
+    @app_commands.command(name="channel", description="Setzt den überwachten Channel (ohne Angabe: Channel entfernen).")
+    @app_commands.describe(channel="Neuer Honeypot-Channel; leer lassen, um ihn zu entfernen")
     @app_commands.checks.has_permissions(ban_members=True)
-    async def channel(self, interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(NOT_IMPLEMENTED, ephemeral=True)
+    async def channel(self, interaction: discord.Interaction, channel: discord.TextChannel | None = None) -> None:
+        guild = interaction.guild
+        settings = self.storage.load(guild.id)
+
+        if channel is not None and channel.id == settings["channel_id"]:
+            await interaction.response.send_message(f"{channel.mention} ist bereits der Honeypot-Channel.", ephemeral=True)
+            return
+
+        # Die Aktualisierungen können dauern, daher zuerst bestätigen.
+        await interaction.response.defer(ephemeral=True)
+        await self.service.delete_info_message(guild)
+
+        if channel is None:
+            if settings["channel_id"] is None:
+                await interaction.followup.send("Es ist kein Honeypot-Channel gesetzt.", ephemeral=True)
+                return
+            self.storage.update(guild.id, channel_id=None, active=False, info_message_id=None, log_thread_id=None)
+            await interaction.followup.send(
+                "Honeypot-Channel entfernt. Die Überwachung ist beendet.", ephemeral=True
+            )
+            return
+
+        settings = self.storage.update(guild.id, channel_id=channel.id, info_message_id=None, log_thread_id=None)
+        text = f"Honeypot-Channel gesetzt: {channel.mention}."
+        if settings["active"]:
+            if await self.service.update_info_message(guild, setup=True) is None:
+                text += " Die Infonachricht konnte dort nicht gesendet werden (fehlen dem Bot Rechte?)."
+            else:
+                text += " Die Infonachricht wurde gesendet."
+        else:
+            text += " Die Überwachung ist inaktiv; mit `/honeypot start` aktivieren."
+        await interaction.followup.send(text, ephemeral=True)
 
     @staticmethod
     def _unique_roles(*roles: discord.Role | None) -> list[discord.Role]:

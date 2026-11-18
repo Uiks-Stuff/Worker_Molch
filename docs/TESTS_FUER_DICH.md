@@ -27,3 +27,11 @@ Einspielen: `/module reload honeypot`
 5. `/honeypot removerole rolle1:<Rolle A> rolle2:<Rolle C ohne Save-Role>` → „Entfernt: A“, „Keine Save-Role: C“.
 6. `/honeypot status` → nur noch B. Nach `/module reload honeypot` bleibt B erhalten.
 - Erwartet: wie beschrieben, alle Antworten nur für dich sichtbar.
+
+## T4 – `/honeypot channel` (Aufgabe 7)
+Einspielen: `/module reload honeypot`
+1. `/honeypot channel channel:#test1` → „Honeypot-Channel gesetzt“, Hinweis „Überwachung ist inaktiv“; in #test1 erscheint noch KEINE Nachricht.
+2. `/honeypot channel channel:#test1` erneut → „bereits der Honeypot-Channel“.
+3. `/honeypot status` → Channel #test1.
+4. `/honeypot channel` ohne Angabe → „Honeypot-Channel entfernt“; status zeigt „nicht gesetzt“.
+(Wechsel bei aktiver Überwachung wird zusammen mit start/stop getestet.)

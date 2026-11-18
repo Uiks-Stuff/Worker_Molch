@@ -40,6 +40,22 @@ class HoneypotService:
                     return message, False
         return None, False
 
+    async def delete_info_message(self, guild: discord.Guild) -> None:
+        """Löscht die gespeicherte Infonachricht (Fehler werden geloggt) und vergisst ihre ID."""
+        settings = self.storage.load(guild.id)
+        channel_id, message_id = settings["channel_id"], settings["info_message_id"]
+        channel = guild.get_channel(channel_id) if channel_id else None
+        if channel is not None and message_id:
+            try:
+                message = await channel.fetch_message(message_id)
+                await message.delete()
+            except discord.NotFound:
+                pass
+            except discord.HTTPException:
+                logger.exception("Alte Infonachricht in Guild %s konnte nicht gelöscht werden.", guild.id)
+        if message_id:
+            self.storage.update(guild.id, info_message_id=None)
+
     async def update_info_message(self, guild: discord.Guild, setup: bool = False) -> discord.Message | None:
         """Sendet bzw. bearbeitet die Infonachricht im überwachten Channel.
 

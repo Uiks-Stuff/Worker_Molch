@@ -49,7 +49,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   da Bot global `none()` nutzt); sonst ohne Ping. Bei `NotFound` ohne Ping neu senden + ID speichern.
   *Abnahme:* Tests: Setup-Ping, kein Ping bei Neustart/Bearbeiten/vorhandener Nachricht, vorhandene Bot-Nachricht übernommen,
   NotFound → neu ohne Ping, Zusatz bei inaktiv, kein Channel → nichts.
-- [ ] **7. `/honeypot channel` (A3/A6)**: optionaler Parameter `channel` (TextChannel). Setzen/Wechsel: alte Infonachricht löschen, Thread-ID zurücksetzen,
+- [x] **7. `/honeypot channel` (A3/A6)**: optionaler Parameter `channel` (TextChannel). Setzen/Wechsel: alte Infonachricht löschen, Thread-ID zurücksetzen,
   bei aktiver Überwachung Infonachricht im neuen Channel. Ohne Parameter: Channel entfernen + Überwachung stoppen.
   *Abnahme:* Tests setzen, wechseln, entfernen.
 - [ ] **8. `/honeypot start` / `stop` (A3)**: start ohne gesetzten Channel: vorhandenen Textchannel „honeypot“ (Name case-insensitive) verwenden,

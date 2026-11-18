@@ -16,8 +16,10 @@ STATUS: ARBEITET
 
 - Aufgabe 6: `service.py` (`HoneypotService.update_info_message`), 11 Tests in `tests/test_honeypot_info.py` (nur Mocks, kein T nötig; wird mit start/stop testbar).
 
+- Aufgabe 7: `/honeypot channel` (+ `service.delete_info_message`), 8 Tests in `tests/test_honeypot_channel.py` (T4 offen).
+
 ## Nächster Schritt
-- Aufgabe 7 (`/honeypot channel` in `cog.py`; Cog bekommt `self.service = HoneypotService(bot, storage)`).
+- Aufgabe 8 (`/honeypot start`/`stop` in `cog.py`: Channel-Fallback „honeypot“, Rechteprüfung, Infonachricht).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
