@@ -17,3 +17,13 @@ Einspielen: Rebuild aus T1 muss durch sein. Dann in Discord `/module enable hone
 3. Optional: mit einem Account ohne „Mitglieder bannen“ `/honeypot status` versuchen.
 - Erwartet: Nur für dich sichtbare Antwort: Überwachung inaktiv, Channel nicht gesetzt, Save-Roles keine, Sprache DEUTSCH, Gebannte User 0.
   Account ohne Recht: Befehl nicht sichtbar bzw. Meldung „Mitglieder bannen“ fehlt. Die anderen Befehle antworten vorerst „noch nicht verfügbar“.
+
+## T3 – `/honeypot setrole` und `removerole` (Aufgabe 5)
+Einspielen: `/module reload honeypot`
+1. `/honeypot setrole rolle1:<Rolle A> rolle2:<Rolle B>` → Antwort „Hinzugefügt: …“.
+2. `/honeypot setrole rolle1:<Rolle A>` erneut → „Bereits Save-Role“.
+3. `/honeypot setrole rolle1:@everyone` → „Nicht erlaubt“. Ebenso mit einer Bot-/Integrationsrolle.
+4. `/honeypot status` → Save-Roles zeigt A und B.
+5. `/honeypot removerole rolle1:<Rolle A> rolle2:<Rolle C ohne Save-Role>` → „Entfernt: A“, „Keine Save-Role: C“.
+6. `/honeypot status` → nur noch B. Nach `/module reload honeypot` bleibt B erhalten.
+- Erwartet: wie beschrieben, alle Antworten nur für dich sichtbar.

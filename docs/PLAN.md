@@ -41,7 +41,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **4. Gerüst + `/honeypot status` (A3)**: `cog.py` mit `GroupCog` (`guild_only`, `default_permissions` + `checks.has_permissions(ban_members=True)`), `setup(bot)`;
   status: aktiv/inaktiv, Channel, Save-Roles (gelöschte Rollen ausblenden), Sprache, Ban-Anzahl.
   *Abnahme:* Test: alle 7 Befehlsnamen registriert & kleingeschrieben, Rechte-Dekoratoren gesetzt, status-Text per Mock-Interaction. Smoke-Test lädt Extension.
-- [ ] **5. `/honeypot setrole` / `removerole` (A3)**: `rolle1` Pflicht, `rolle2`–`rolle5` optional; `@everyone` und Bot-verwaltete Rollen ablehnen; Duplikate/nicht gesetzte Rollen melden.
+- [x] **5. `/honeypot setrole` / `removerole` (A3)**: `rolle1` Pflicht, `rolle2`–`rolle5` optional; `@everyone` und Bot-verwaltete Rollen ablehnen; Duplikate/nicht gesetzte Rollen melden.
   *Abnahme:* Tests hinzufügen, entfernen, Duplikate, Ablehnungen.
 - [ ] **6. Infonachricht (A6)** in `service.py`: `update_info_message(guild, setup=False)` sendet/bearbeitet (Text je nach aktiv/inaktiv);
   vorhandene Nachricht finden: gespeicherte ID, sonst eigene Bot-Nachricht in den letzten 50 Nachrichten übernehmen;

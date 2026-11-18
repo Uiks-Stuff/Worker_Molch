@@ -12,8 +12,10 @@ STATUS: ARBEITET
 
 - Aufgabe 4: `cog.py` (`Honeypot` GroupCog, status fertig, übrige 6 Befehle als Platzhalter „noch nicht verfügbar“), 7 Tests (T2 offen).
 
+- Aufgabe 5: `setrole`/`removerole` (`rolle1`–`rolle5`), 6 Tests in `tests/test_honeypot_roles.py` (T3 offen).
+
 ## Nächster Schritt
-- Aufgabe 5 (`setrole`/`removerole` in `cog.py`, Platzhalter ersetzen, Parameter `rolle1`–`rolle5`).
+- Aufgabe 6 (Infonachricht: neues `modules/honeypot/service.py`, `update_info_message(guild, setup=False)`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
