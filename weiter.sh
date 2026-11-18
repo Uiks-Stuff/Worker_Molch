@@ -17,7 +17,7 @@ while true; do
   fi
 
   log "Starte Durchlauf"
-  claude -p "/weiter" --permission-mode acceptEdits >> "$LOG" 2>&1
+  claude -p "/weiter" --model sonnet --permission-mode acceptEdits >> "$LOG" 2>&1
   rc=$?
 
   if [ $rc -ne 0 ]; then
