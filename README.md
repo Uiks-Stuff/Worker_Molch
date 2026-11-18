@@ -63,6 +63,37 @@ Vor jeder Löschung erscheint eine Bestätigungsabfrage. Nur der Benutzer, der d
 
 Das Modul funktioniert in normalen Discord-Textkanälen und Threads. Sprachkanäle und andere Kanaltypen werden nicht unterstützt.
 
+### Modul `honeypot`
+
+Ein Honeypot-Channel bannt automatisch jeden, der dort schreibt (typisch für Scammer). Aktivieren mit `/module enable modul:honeypot`.
+
+| Befehl | Beschreibung |
+|---|---|
+| `/honeypot start` | Startet die Überwachung. Ist kein Channel gesetzt, wird ein vorhandener Textchannel „honeypot“ genutzt oder neu angelegt. |
+| `/honeypot stop` | Beendet die Überwachung; die Infonachricht bekommt den Zusatz „Honeypot under construction“. |
+| `/honeypot status` | Zeigt Status, Channel, Save-Roles, Sprache und Anzahl gebannter User. |
+| `/honeypot channel channel:#kanal` | Setzt bzw. wechselt den Channel; ohne Angabe wird der Channel entfernt und die Überwachung gestoppt. |
+| `/honeypot setrole rolle1:@Rolle [rolle2 … rolle5]` | Fügt Save-Roles hinzu: deren Mitglieder werden nie gebannt. |
+| `/honeypot removerole rolle1:@Rolle [rolle2 … rolle5]` | Entfernt Save-Roles. |
+| `/honeypot setlanguage language:DEUTSCH` | Setzt die Sprache der Infonachricht im Channel (Autocomplete aus der Sprachdatei). |
+
+Alle Befehle sind nur auf Servern nutzbar, nur für Mitglieder mit **Mitglieder bannen** (Moderatoren/Admins) und antworten nur für den Ausführenden sichtbar.
+
+**Wer wird nicht gebannt:** Mitglieder mit Save-Role, Mitglieder mit „Mitglieder bannen“ oder Administrator, der Servereigentümer, Bots und Webhooks. Beim Bann werden zusätzlich die Nachrichten des Users der letzten Stunde (serverweit) gelöscht.
+
+**Infonachricht:** Der Bot postet im Channel den Text aus der Sprachdatei samt Ban-Anzahl und hält ihn aktuell. `@everyone` wird nur einmalig beim Aufsetzen gepingt, nicht nach Neustart, Bearbeitung oder `start` nach `stop`.
+
+**Log:** Im Honeypot-Channel legt der Bot einen privaten Thread „honeypot-log“ an (sichtbar für Moderatoren mit „Threads verwalten“ und Admins). Jeder Bann steht dort mit User-ID, Name, Grund, Nachricht und Zeitpunkt; auch fehlgeschlagene Banns.
+
+**Sprachdatei:** `modules/honeypot/languages.txt`, Format `[NAME]` gefolgt von Zeilen ` - …`: Zeile 1 = Infotext, Zeile 2 = Ban-Zeile (`X` wird durch die Anzahl ersetzt), Zeile 3 (optional) = Zusatz bei gestoppter Überwachung. Neue Sprachen einfach als weiteren Abschnitt anfügen – kein Reload nötig.
+
+**Voraussetzungen:**
+- Im Discord Developer Portal (Bot) muss der **Message Content Intent** aktiviert sein, sonst startet der Bot nicht.
+- Bot-Rechte im Honeypot-Channel: Kanal ansehen, Nachrichten senden, Nachrichtenverlauf anzeigen, Nachrichten verwalten, Mitglieder bannen, @everyone erwähnen, Private Threads erstellen, In Threads Nachrichten senden. Fehlende Rechte meldet `/honeypot start`. Zum automatischen Anlegen des Channels braucht der Bot **Kanäle verwalten**.
+- Rollenhierarchie: Die Bot-Rolle muss **über** den Rollen der zu bannenden User stehen, sonst scheitert der Bann (wird im Log-Thread vermerkt).
+- Die Einstellungen liegen in `data/honeypot.json`; das Verzeichnis `data` muss für den Docker-Benutzer beschreibbar sein (siehe 5.3).
+- Nach Änderungen an `main.py` (Intents) ist ein Neubau nötig: `sudo docker compose up -d --build`.
+
 ---
 
 ## Was wird benötigt?
@@ -324,7 +355,7 @@ Dem Bot mindestens diese Serverberechtigungen geben:
 
 Anschließend den generierten Installationslink öffnen und den Bot auf den gewünschten Discord-Server einladen.
 
-Für die hier verwendeten Slash-Commands ist kein privilegierter **Message Content Intent** erforderlich.
+Für die Slash-Commands allein ist kein privilegierter Intent nötig. Das Modul `honeypot` verlangt jedoch den **Message Content Intent** (siehe [Modul `honeypot`](#modul-honeypot)). Aktiviere ihn im Developer Portal unter *Bot → Privileged Gateway Intents*.
 
 ---
 
@@ -623,9 +654,9 @@ Prüfen:
 
 Diese Warnungen betreffen die Unterstützung von Sprachkanälen/Voice-Funktionen. Der aktuelle Bot verwendet keine Voice-Funktionen; für `/ping`, `/clear` und `/module` sind diese Pakete nicht erforderlich.
 
-### Warnung zum fehlenden Message Content Intent
+### Fehler `PrivilegedIntentsRequired` / Message Content Intent
 
-Der aktuelle Bot nutzt Slash-Commands und benötigt für die beschriebenen Funktionen keinen privilegierten Message Content Intent. Die Warnung kann bei `discord.py` erscheinen, weil der Bot von der `commands.Bot`-Klasse erbt. Solange die Slash-Commands funktionieren, ist das für den aktuellen Funktionsumfang kein Fehler.
+Das Modul `honeypot` benötigt den privilegierten **Message Content Intent**; der Bot fordert ihn an. Aktiviere ihn im Developer Portal unter *Bot → Privileged Gateway Intents → Message Content Intent*. Ohne diese Einstellung bricht der Start mit `PrivilegedIntentsRequired` ab.
 
 ---
 

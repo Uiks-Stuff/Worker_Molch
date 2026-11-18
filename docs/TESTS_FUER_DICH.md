@@ -71,3 +71,12 @@ Einspielen: `/module reload honeypot`. Voraussetzung: Überwachung aktiv (T5).
 4. `language:KLINGONISCH` → Meldung „Unbekannte Sprache“ mit Liste, nichts ändert sich.
 5. Optional: In `modules/honeypot/languages.txt` einen Abschnitt `[FRANCAIS]` mit zwei Zeilen ` - …` ergänzen (ohne Reload) → erscheint sofort im Autocomplete und ist wählbar.
 - Erwartet: wie beschrieben.
+
+## T8 – Neustart und Abnahme laut Lastenheft (Aufgaben 13–15)
+Einspielen: nichts Neues (README ist aktualisiert).
+1. Überwachung aktiv, Save-Role gesetzt, Sprache ENGLISH, ein Bann ausgelöst (T7). Dann Bot neu starten: `cd /home/uik/projects/Worker_Molch && sudo docker compose restart`.
+2. `/honeypot status` → alles unverändert (aktiv, Channel, Save-Role, Sprache, Bans). Infonachricht bleibt, kein neuer `@everyone`-Ping, keine zweite Infonachricht.
+3. Erneut mit Test-Account schreiben → gebannt, Zähler +1, Log-Eintrag im selben Thread.
+4. `/module reload modul:honeypot` → Zustand ebenfalls unverändert.
+5. Abnahmekriterien Lastenheft abhaken: alle `/honeypot`-Befehle funktionieren; User ohne Save-Role werden gebannt; Thread nur für Moderatoren/Admins sichtbar; Sprachwechsel passt die Nachricht an.
+- Erwartet: wie beschrieben. Ergebnis aller Tests (T1–T8) bitte in `docs/FEEDBACK.md`.

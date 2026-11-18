@@ -75,7 +75,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   *Abnahme:* Tests: Thread neu/vorhanden/gelöscht → neu, Inhalt, Kürzung, leerer Inhalt, Log-Fehler.
 - [x] **13. Neustart/Reload + Integration (A1/A7)**: Mock-Ablauf start → Nachricht → Bann → Log → Zähler → Infonachricht; neues Cog mit gleicher Datei kennt Zustand.
   *Abnahme:* Integrationstest grün.
-- [ ] **14. Doku**: README: Modul `honeypot` (Befehle, nötige Bot-Rechte, Message Content Intent, Rollenhierarchie: Bot-Rolle über zu bannenden Usern, `data/`-Rechte).
+- [x] **14. Doku**: README: Modul `honeypot` (Befehle, nötige Bot-Rechte, Message Content Intent, Rollenhierarchie: Bot-Rolle über zu bannenden Usern, `data/`-Rechte).
   *Abnahme:* README aktualisiert, TESTS_FUER_DICH vollständig (T1…).
 - [ ] **15. (manuell)** Tests aus `docs/TESTS_FUER_DICH.md` in Discord durchführen, Ergebnis in `docs/FEEDBACK.md`.
   *Abnahme:* alle Abnahmekriterien des Lastenhefts mit OK bestätigt.
