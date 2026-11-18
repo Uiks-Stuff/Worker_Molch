@@ -1,4 +1,4 @@
-STATUS: WARTE_AUF_FEEDBACK
+STATUS: ARBEITET
 
 ## Zuletzt erledigt
 - Aufgaben 1–14 fertig, 119 Tests grün (`.venv/bin/pytest -q`), alles committed.
