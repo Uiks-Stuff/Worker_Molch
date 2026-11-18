@@ -25,8 +25,10 @@ STATUS: ARBEITET
 - Aufgabe 10: `service.handle_message` (Bann→Löschen→`_log_event`→`_record_ban`), `handle_channel_deleted`, Listener im Cog, 23 Tests. `_log_event`/`_record_ban` sind noch leere Platzhalter.
   Manueller Test (Bann in Discord) kommt erst als T7 nach Aufgabe 12.
 
+- Aufgabe 11: `service._record_ban` (Zähler +1, Info-Update, Fehler abgefangen), 6 Tests in `tests/test_honeypot_counter.py`.
+
 ## Nächster Schritt
-- Aufgabe 11 (`service._record_ban`: `ban_count += 1`, speichern, `update_info_message`; Fehler dürfen nicht abbrechen).
+- Aufgabe 12 (Log-Thread: `service._log_event(guild, snapshot, banned, error=None)` implementieren, privater Thread „honeypot-log“, Embed).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

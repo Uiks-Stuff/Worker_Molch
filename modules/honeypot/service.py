@@ -113,7 +113,17 @@ class HoneypotService:
         """Ereignislog im Thread (Aufgabe 12)."""
 
     async def _record_ban(self, guild: discord.Guild) -> None:
-        """Zähler erhöhen und Infonachricht aktualisieren (Aufgabe 11)."""
+        """Zähler erhöhen und Infonachricht aktualisieren. Fehler brechen nichts ab (Bann ist schon erfolgt)."""
+        try:
+            count = self.storage.load(guild.id)["ban_count"] + 1
+            self.storage.update(guild.id, ban_count=count)
+        except Exception:
+            logger.exception("Ban-Zähler in Guild %s konnte nicht gespeichert werden.", guild.id)
+            return
+        try:
+            await self.update_info_message(guild)
+        except Exception:
+            logger.exception("Infonachricht in Guild %s konnte nach dem Bann nicht aktualisiert werden.", guild.id)
 
     async def handle_channel_deleted(self, channel: discord.abc.GuildChannel) -> bool:
         """Überwachter Channel gelöscht -> Überwachung aus, Verweise zurücksetzen."""
