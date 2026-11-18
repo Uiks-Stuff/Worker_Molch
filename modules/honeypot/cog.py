@@ -6,7 +6,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from .languages import resolve_language, LanguageError
+from .languages import LanguageError, language_names, resolve_language
 from .service import HoneypotService
 from .storage import HoneypotStorage
 
@@ -257,9 +257,31 @@ class Honeypot(commands.GroupCog, name="honeypot", description="Honeypot-Channel
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @app_commands.command(name="setlanguage", description="Setzt die Sprache der Infonachricht.")
+    @app_commands.describe(language="Sprache laut Sprachdatei, z. B. DEUTSCH")
     @app_commands.checks.has_permissions(ban_members=True)
-    async def setlanguage(self, interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(NOT_IMPLEMENTED, ephemeral=True)
+    async def setlanguage(self, interaction: discord.Interaction, language: str) -> None:
+        guild = interaction.guild
+        names = language_names()
+        name = language.strip().upper()
+        if name not in names:
+            available = ", ".join(names) or "keine"
+            await interaction.response.send_message(
+                f"Unbekannte Sprache **{language}**. Verfügbar: {available}", ephemeral=True
+            )
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(guild.id, language=name)
+        # Ohne gesetzten Channel passiert hier nichts; sonst wird die Infonachricht angepasst.
+        await self.service.update_info_message(guild)
+        await interaction.followup.send(f"Sprache auf **{name}** gesetzt.", ephemeral=True)
+
+    @setlanguage.autocomplete("language")
+    async def _language_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice[str]]:
+        current = current.strip().upper()
+        return [app_commands.Choice(name=name, value=name) for name in language_names() if current in name][:25]
 
 
 async def setup(bot: commands.Bot) -> None:

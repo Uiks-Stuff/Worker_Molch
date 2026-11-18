@@ -48,3 +48,12 @@ Mitglieder bannen, @everyone erwähnen, Private Threads erstellen, In Threads se
 7. Dem Bot im Channel das Recht „Nachrichten verwalten“ entziehen, `/honeypot stop`, `/honeypot start` → Meldung, dass dieses Recht fehlt; Überwachung bleibt inaktiv.
 8. Optional: Bot-Rechte wieder geben; Infonachricht von Hand löschen und `/honeypot stop` + `/honeypot start` → Nachricht kommt ohne Ping neu.
 - Erwartet: wie beschrieben.
+
+## T6 – `/honeypot setlanguage` (Aufgabe 9)
+Einspielen: `/module reload honeypot`. Voraussetzung: Überwachung aktiv (T5).
+1. `/honeypot setlanguage language:` tippen → Autocomplete schlägt DEUTSCH und ENGLISH vor.
+2. `language:ENGLISH` → Infonachricht im Channel wird auf Englisch bearbeitet (Bans-Zahl bleibt), kein neuer Ping, keine zweite Nachricht.
+3. `language:deutsch` (klein) → wieder Deutsch. `/honeypot status` zeigt DEUTSCH.
+4. `language:KLINGONISCH` → Meldung „Unbekannte Sprache“ mit Liste, nichts ändert sich.
+5. Optional: In `modules/honeypot/languages.txt` einen Abschnitt `[FRANCAIS]` mit zwei Zeilen ` - …` ergänzen (ohne Reload) → erscheint sofort im Autocomplete und ist wählbar.
+- Erwartet: wie beschrieben.

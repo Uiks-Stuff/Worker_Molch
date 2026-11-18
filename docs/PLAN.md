@@ -59,7 +59,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   start nach stop entfernt den Zusatz (ohne Ping). Jeweils „bereits aktiv/inaktiv“ melden.
   *Abnahme:* Tests: Channel gesetzt / vorhandener „honeypot“ / neu angelegt, bereits aktiv/inaktiv, fehlende Rechte,
   `Forbidden` beim Anlegen, stop setzt Zusatz, erneuter start ohne Ping.
-- [ ] **9. `/honeypot setlanguage` (A3/A6)**: Parameter `language` mit Autocomplete aus Sprachdatei; speichern; Infonachricht bearbeiten (falls Channel gesetzt).
+- [x] **9. `/honeypot setlanguage` (A3/A6)**: Parameter `language` mit Autocomplete aus Sprachdatei; speichern; Infonachricht bearbeiten (falls Channel gesetzt).
   *Abnahme:* Tests: gültig (auch Kleinschreibung), ungültig, Autocomplete-Liste, Nachricht bearbeitet.
 - [ ] **10. Bann-Logik (A4/A7)**: `on_message`: nur aktiv + `message.channel.id == channel_id` (Nachrichten im Log-Thread zählen nicht);
   Ausnahmen laut A4; Bann sofort als erster API-Aufruf (Nachrichtendaten fürs Log vorher lokal sichern),

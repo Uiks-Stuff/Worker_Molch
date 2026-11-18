@@ -20,8 +20,10 @@ STATUS: ARBEITET
 
 - Aufgabe 8: `/honeypot start`/`stop` (Channel-Fallback, Rechteprüfung `REQUIRED_BOT_PERMISSIONS`), 11 Tests (T5 offen).
 
+- Aufgabe 9: `/honeypot setlanguage` mit Autocomplete, 6 Tests (T6 offen).
+
 ## Nächster Schritt
-- Aufgabe 9 (`/honeypot setlanguage` in `cog.py`, Parameter `language` mit Autocomplete aus `languages.language_names()`).
+- Aufgabe 10 (Bann-Logik: `on_message` + `on_guild_channel_delete` im Cog, Entscheidung/Bann in `service.py`; Log/Zähler folgen in 11/12).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
