@@ -29,8 +29,10 @@ STATUS: ARBEITET
 
 - Aufgabe 12: `service._log_event`/`_get_log_thread`/`_build_log_embed`, 11 Tests in `tests/test_honeypot_log.py` (T7 für 10–12 offen).
 
+- Aufgabe 13: `tests/test_honeypot_integration.py` (Ablauf inkl. Neustart, Save-Role/Mod, Channel gelöscht), gesamt 119 Tests grün.
+
 ## Nächster Schritt
-- Aufgabe 13 (Integrationstest Mock-Ablauf start → Nachricht → Bann → Log → Zähler → Info; neues Cog mit gleicher Datei kennt Zustand).
+- Aufgabe 14 (README: Modul `honeypot`; TESTS_FUER_DICH auf Vollständigkeit prüfen). Danach Aufgabe 15 = Nutzertests → `STATUS: WARTE_AUF_FEEDBACK`.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
