@@ -18,8 +18,10 @@ STATUS: ARBEITET
 
 - Aufgabe 7: `/honeypot channel` (+ `service.delete_info_message`), 8 Tests in `tests/test_honeypot_channel.py` (T4 offen).
 
+- Aufgabe 8: `/honeypot start`/`stop` (Channel-Fallback, Rechteprüfung `REQUIRED_BOT_PERMISSIONS`), 11 Tests (T5 offen).
+
 ## Nächster Schritt
-- Aufgabe 8 (`/honeypot start`/`stop` in `cog.py`: Channel-Fallback „honeypot“, Rechteprüfung, Infonachricht).
+- Aufgabe 9 (`/honeypot setlanguage` in `cog.py`, Parameter `language` mit Autocomplete aus `languages.language_names()`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

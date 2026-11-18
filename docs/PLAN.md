@@ -52,7 +52,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **7. `/honeypot channel` (A3/A6)**: optionaler Parameter `channel` (TextChannel). Setzen/Wechsel: alte Infonachricht löschen, Thread-ID zurücksetzen,
   bei aktiver Überwachung Infonachricht im neuen Channel. Ohne Parameter: Channel entfernen + Überwachung stoppen.
   *Abnahme:* Tests setzen, wechseln, entfernen.
-- [ ] **8. `/honeypot start` / `stop` (A3)**: start ohne gesetzten Channel: vorhandenen Textchannel „honeypot“ (Name case-insensitive) verwenden,
+- [x] **8. `/honeypot start` / `stop` (A3)**: start ohne gesetzten Channel: vorhandenen Textchannel „honeypot“ (Name case-insensitive) verwenden,
   sonst anlegen, und setzen. Bot-Rechte im Channel prüfen (Kanal ansehen, Nachrichten senden, Verlauf lesen, Nachrichten verwalten,
   Mitglieder bannen, @everyone erwähnen, private Threads erstellen, in Threads senden) → fehlende verständlich melden;
   aktivieren + Infonachricht (`setup=True`). stop: deaktivieren, Infonachricht mit Zusatz „under construction“ bearbeiten.

@@ -35,3 +35,16 @@ Einspielen: `/module reload honeypot`
 3. `/honeypot status` → Channel #test1.
 4. `/honeypot channel` ohne Angabe → „Honeypot-Channel entfernt“; status zeigt „nicht gesetzt“.
 (Wechsel bei aktiver Überwachung wird zusammen mit start/stop getestet.)
+
+## T5 – `/honeypot start` und `stop` (Aufgabe 8)
+Einspielen: `/module reload honeypot`. Der Bot braucht im Channel: Kanal ansehen, Nachrichten senden, Nachrichtenverlauf, Nachrichten verwalten,
+Mitglieder bannen, @everyone erwähnen, Private Threads erstellen, In Threads senden.
+1. Ohne gesetzten Channel und ohne Channel „honeypot“: `/honeypot start` → Channel „honeypot“ wird angelegt, Infonachricht erscheint mit @everyone-Ping (Test-Account bekommt Benachrichtigung).
+2. `/honeypot start` erneut → „bereits aktiv“.
+3. `/honeypot stop` → Infonachricht wird bearbeitet, unten steht „Honeypot under construction“. Kein neuer Ping.
+4. `/honeypot stop` erneut → „bereits inaktiv“.
+5. `/honeypot start` → derselbe Zusatz verschwindet, Nachricht wird bearbeitet, KEIN neuer Ping, keine zweite Nachricht.
+6. `/honeypot channel channel:#test1` (bei aktiver Überwachung) → alte Infonachricht im alten Channel weg, neue mit Ping in #test1.
+7. Dem Bot im Channel das Recht „Nachrichten verwalten“ entziehen, `/honeypot stop`, `/honeypot start` → Meldung, dass dieses Recht fehlt; Überwachung bleibt inaktiv.
+8. Optional: Bot-Rechte wieder geben; Infonachricht von Hand löschen und `/honeypot stop` + `/honeypot start` → Nachricht kommt ohne Ping neu.
+- Erwartet: wie beschrieben.
