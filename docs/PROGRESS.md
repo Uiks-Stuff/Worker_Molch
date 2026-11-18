@@ -14,8 +14,10 @@ STATUS: ARBEITET
 
 - Aufgabe 5: `setrole`/`removerole` (`rolle1`–`rolle5`), 6 Tests in `tests/test_honeypot_roles.py` (T3 offen).
 
+- Aufgabe 6: `service.py` (`HoneypotService.update_info_message`), 11 Tests in `tests/test_honeypot_info.py` (nur Mocks, kein T nötig; wird mit start/stop testbar).
+
 ## Nächster Schritt
-- Aufgabe 6 (Infonachricht: neues `modules/honeypot/service.py`, `update_info_message(guild, setup=False)`).
+- Aufgabe 7 (`/honeypot channel` in `cog.py`; Cog bekommt `self.service = HoneypotService(bot, storage)`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
