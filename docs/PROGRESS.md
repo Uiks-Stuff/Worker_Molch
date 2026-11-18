@@ -6,8 +6,10 @@ STATUS: ARBEITET
 
 - Aufgabe 1: Intents `guild_messages` + `message_content`, Label `ban_members` (T1 offen, braucht Rebuild).
 
+- Aufgabe 2: `modules/honeypot/storage.py` (`HoneypotStorage.load/save/update`), 8 Tests.
+
 ## Nächster Schritt
-- Aufgabe 2 (Speicher `modules/honeypot/storage.py`).
+- Aufgabe 3 (Sprachdatei `languages.txt` + `languages.py`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

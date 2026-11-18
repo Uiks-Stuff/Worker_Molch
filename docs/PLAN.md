@@ -32,7 +32,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **1. Core-Intents (A0)**: `main.py`: `intents.guild_messages = True`, `intents.message_content = True`; Label `ban_members` im Error-Handler.
   *Abnahme:* Test prüft Intents + Label; alle Tests grün; T1 in TESTS_FUER_DICH (erst Intent im Developer Portal aktivieren,
   dann Rebuild – sonst startet der Bot wegen `PrivilegedIntentsRequired` gar nicht).
-- [ ] **2. Speicher (A1)**: `modules/honeypot/__init__.py`, `storage.py` (Defaults, laden/speichern pro Guild, atomar).
+- [x] **2. Speicher (A1)**: `modules/honeypot/__init__.py`, `storage.py` (Defaults, laden/speichern pro Guild, atomar).
   *Abnahme:* Tests: Defaults bei fehlender/defekter Datei, Roundtrip, Guilds getrennt, `data/` wird angelegt.
 - [ ] **3. Sprachdatei (A2)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft + Zeile 3 „Honeypot under construction“) und `[ENGLISH]`;
   Parser: Namen case-insensitive, führende Leerzeichen/`- ` entfernen, `X` (als eigenes Wort) → Zahl, fehlende Zeile 3 → Standardtext,
