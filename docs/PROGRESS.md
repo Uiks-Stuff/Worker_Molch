@@ -8,8 +8,10 @@ STATUS: ARBEITET
 
 - Aufgabe 2: `modules/honeypot/storage.py` (`HoneypotStorage.load/save/update`), 8 Tests.
 
+- Aufgabe 3: `languages.txt` (DEUTSCH, ENGLISH), `languages.py` (`get_language`, `resolve_language`, `render_info`), 11 Tests.
+
 ## Nächster Schritt
-- Aufgabe 3 (Sprachdatei `languages.txt` + `languages.py`).
+- Aufgabe 4 (`cog.py` GroupCog + `/honeypot status`, Smoke-Test Extension laden).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

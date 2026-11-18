@@ -34,7 +34,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   dann Rebuild – sonst startet der Bot wegen `PrivilegedIntentsRequired` gar nicht).
 - [x] **2. Speicher (A1)**: `modules/honeypot/__init__.py`, `storage.py` (Defaults, laden/speichern pro Guild, atomar).
   *Abnahme:* Tests: Defaults bei fehlender/defekter Datei, Roundtrip, Guilds getrennt, `data/` wird angelegt.
-- [ ] **3. Sprachdatei (A2)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft + Zeile 3 „Honeypot under construction“) und `[ENGLISH]`;
+- [x] **3. Sprachdatei (A2)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft + Zeile 3 „Honeypot under construction“) und `[ENGLISH]`;
   Parser: Namen case-insensitive, führende Leerzeichen/`- ` entfernen, `X` (als eigenes Wort) → Zahl, fehlende Zeile 3 → Standardtext,
   unbekannte Sprache → Fehler, gespeicherte aber entfernte Sprache → Fallback DEUTSCH. Text aktiv/inaktiv rendern.
   *Abnahme:* Tests für alle genannten Fälle inkl. leerer Abschnitt und fehlender Zeile 3.
