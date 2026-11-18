@@ -9,10 +9,10 @@ log() { echo "$(date '+%F %T') $*" | tee -a "$LOG"; }
 while true; do
   if [ -f STOP ]; then log "STOP-Datei gefunden – beende."; rm -f STOP; break; fi
   if [ ! -f docs/PLAN.md ]; then log "Kein docs/PLAN.md – zuerst interaktiv /plan ausführen."; break; fi
-  if grep -q 'STATUS: WARTE_AUF_FEEDBACK' docs/PROGRESS.md 2>/dev/null; then
+  if grep -q '^STATUS: WARTE_AUF_FEEDBACK' docs/PROGRESS.md 2>/dev/null; then
     log "Wartet auf dein Feedback (docs/TESTS_FUER_DICH.md) – beende."; break
   fi
-  if grep -q 'STATUS: FERTIG' docs/PROGRESS.md 2>/dev/null || ! grep -q -- '- \[ \]' docs/PLAN.md; then
+  if grep -q '^STATUS: FERTIG' docs/PROGRESS.md 2>/dev/null || ! grep -q -- '- \[ \]' docs/PLAN.md; then
     log "Alle Aufgaben erledigt – beende."; break
   fi
 
