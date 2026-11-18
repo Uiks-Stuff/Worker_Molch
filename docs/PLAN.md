@@ -29,7 +29,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   gelöschte Info-Nachricht/Thread → neu erstellen, archivierter Thread wird weiterverwendet, fehlende Bot-Rechte → verständliche Meldung.
 
 ## Aufgaben
-- [ ] **1. Core-Intents (A0)**: `main.py`: `intents.guild_messages = True`, `intents.message_content = True`; Label `ban_members` im Error-Handler.
+- [x] **1. Core-Intents (A0)**: `main.py`: `intents.guild_messages = True`, `intents.message_content = True`; Label `ban_members` im Error-Handler.
   *Abnahme:* Test prüft Intents + Label; alle Tests grün; T1 in TESTS_FUER_DICH (erst Intent im Developer Portal aktivieren,
   dann Rebuild – sonst startet der Bot wegen `PrivilegedIntentsRequired` gar nicht).
 - [ ] **2. Speicher (A1)**: `modules/honeypot/__init__.py`, `storage.py` (Defaults, laden/speichern pro Guild, atomar).

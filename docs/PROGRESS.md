@@ -4,8 +4,10 @@ STATUS: ARBEITET
 - Plan erstellt und kritisch überarbeitet (`docs/PLAN.md`): Architektur (storage/languages/service/cog), 15 Aufgaben, A0–A7.
 - Test-Setup: `requirements-dev.txt`, `pytest.ini`, `tests/test_smoke.py` (6 Tests, grün).
 
+- Aufgabe 1: Intents `guild_messages` + `message_content`, Label `ban_members` (T1 offen, braucht Rebuild).
+
 ## Nächster Schritt
-- Plan final abgestimmt. Aufgabe 1 (Core-Intents in `main.py`).
+- Aufgabe 2 (Speicher `modules/honeypot/storage.py`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

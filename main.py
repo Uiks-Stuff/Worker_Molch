@@ -37,6 +37,9 @@ class DiscordBot(commands.Bot):
     def __init__(self) -> None:
         intents = discord.Intents.none()
         intents.guilds = True
+        # Für das Modul honeypot: Nachrichten-Events und Nachrichteninhalt (privilegierter Intent).
+        intents.guild_messages = True
+        intents.message_content = True
 
         super().__init__(
             command_prefix="!",  # Nur als Fallback; wir verwenden Slash-Commands.
@@ -106,6 +109,7 @@ async def on_app_command_error(
         labels = {
             "manage_messages": "Nachrichten verwalten",
             "manage_guild": "Server verwalten",
+            "ban_members": "Mitglieder bannen",
         }
         missing = ", ".join(labels.get(permission, permission) for permission in error.missing_permissions)
         message = f"Dir fehlen die erforderlichen Berechtigungen: **{missing}**."
