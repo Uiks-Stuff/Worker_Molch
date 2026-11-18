@@ -5,7 +5,7 @@ STATUS: ARBEITET
 - Test-Setup: `requirements-dev.txt`, `pytest.ini`, `tests/test_smoke.py` (6 Tests, grün).
 
 ## Nächster Schritt
-- Plan-Freigabe + Antworten auf offene Fragen abwarten. Danach Aufgabe 1 (Core-Intents in `main.py`).
+- Nutzer-Antworten eingearbeitet. Nach Freigabe: Aufgabe 1 (Core-Intents in `main.py`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
@@ -15,12 +15,17 @@ STATUS: ARBEITET
 
 ## Annahmen & Entscheidungen
 - Befehlsnamen klein (`setrole`, `removerole`, `setlanguage`) – Discord/discord.py erzwingt Kleinschreibung.
-- Moderatoren/Admin = Berechtigung `ban_members` (Admin implizit); diese werden nie gebannt.
-- Log-Thread privat; sichtbar für „Threads verwalten“/Admin (Discord kann keine Rolle direkt in einen Thread setzen).
+- Moderatoren/Admin = Berechtigung `ban_members` (Nutzer bestätigt); diese werden nie gebannt.
+- Log-Thread privat; sichtbar für „Threads verwalten“/Admin, keine eigene Log-Rolle (Nutzer bestätigt).
 - Speicherung `data/honeypot.json` pro Guild (`core/database.py` ist leer, ungenutzt).
-- Rollen: `rolle1`–`rolle5`; Channel als Channel-Auswahl; Auto-Channel heißt „honeypot“ (Discord: klein).
+- Rollen: `rolle1`–`rolle5`; Channel als Channel-Auswahl.
+- `start` ohne Channel: vorhandenen Channel „honeypot“ nutzen, sonst anlegen (Nutzer bestätigt).
 - Standardsprache DEUTSCH; Platzhalter `X` als eigenes Wort; Sprache gilt nur für die Infonachricht, Log bleibt deutsch.
-- `@everyone` pingt nur beim Neusenden der Infonachricht, Bearbeitungen pingen nicht.
-- Bann löscht Nachrichten der letzten Stunde (`delete_message_seconds=3600`).
-- `stop` lässt die Infonachricht stehen; Channel entfernt/gelöscht → Überwachung aus.
+- `@everyone` pingt einmalig beim Aufsetzen; nicht nach Neustart, beim Bearbeiten oder wenn Nachricht existiert (Nutzer bestätigt).
+  Gelöschte Infonachricht wird ohne Ping neu gesendet.
+- Bann sofort, danach Honeypot-Nachricht sofort löschen (Nutzer). Zusätzlich `delete_message_seconds=3600`
+  (entfernt Spam des Users der letzten Stunde serverweit) – Annahme, bei Bedarf auf 0 setzen.
+- `stop`: Infonachricht bekommt Zusatz aus Zeile 3 der Sprachdatei (Standard „Honeypot under construction“) (Nutzer).
+- Infonachricht wird erst bei `start` gepostet, nicht schon bei `/honeypot channel` im inaktiven Zustand.
+- Channel entfernt/gelöscht → Überwachung aus.
 - Mehrere Nachrichten eines Users → nur ein Bann, Zähler +1.
