@@ -284,5 +284,21 @@ class Honeypot(commands.GroupCog, name="honeypot", description="Honeypot-Channel
         return [app_commands.Choice(name=name, value=name) for name in language_names() if current in name][:25]
 
 
+    # ---------------------------------------------------------------- Listener
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message) -> None:
+        try:
+            await self.service.handle_message(message)
+        except Exception:
+            logger.exception("Fehler bei der Honeypot-Auswertung einer Nachricht.")
+
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel: discord.abc.GuildChannel) -> None:
+        try:
+            await self.service.handle_channel_deleted(channel)
+        except Exception:
+            logger.exception("Fehler beim Behandeln eines gelöschten Channels.")
+
+
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Honeypot(bot))
