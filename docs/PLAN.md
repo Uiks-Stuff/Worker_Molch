@@ -77,5 +77,5 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   *Abnahme:* Integrationstest grün.
 - [x] **14. Doku**: README: Modul `honeypot` (Befehle, nötige Bot-Rechte, Message Content Intent, Rollenhierarchie: Bot-Rolle über zu bannenden Usern, `data/`-Rechte).
   *Abnahme:* README aktualisiert, TESTS_FUER_DICH vollständig (T1…).
-- [ ] **15. (manuell)** Tests aus `docs/TESTS_FUER_DICH.md` in Discord durchführen, Ergebnis in `docs/FEEDBACK.md`.
+- [x] **15. (manuell)** Tests aus `docs/TESTS_FUER_DICH.md` in Discord durchführen, Ergebnis in `docs/FEEDBACK.md`.
   *Abnahme:* alle Abnahmekriterien des Lastenhefts mit OK bestätigt.

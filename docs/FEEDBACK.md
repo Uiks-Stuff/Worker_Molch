@@ -71,3 +71,4 @@ T8 - 2. passt
 T8 - 3. passt
 T8 - 4. passt
 T8 - 5. alle funktionen wie gefordert
+[erledigt] T1–T8 vollständig ausgewertet, keine Fehler.

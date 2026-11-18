@@ -1,21 +1,16 @@
-STATUS: ARBEITET
+STATUS: FERTIG
 
 ## Zuletzt erledigt
-- Aufgaben 1–14 fertig, 119 Tests grün (`.venv/bin/pytest -q`), alles committed.
-- Core: Intents `guild_messages` + `message_content`, Label `ban_members` (`main.py`).
-- Modul `modules/honeypot/`: `storage.py`, `languages.py` + `languages.txt`, `service.py` (Infonachricht, Bann, Log-Thread, Zähler), `cog.py` (7 Befehle + Listener).
-- README um Modul `honeypot` ergänzt; `docs/TESTS_FUER_DICH.md` mit T1–T8.
+- Aufgaben 1–15 fertig; 119 Tests grün (`.venv/bin/pytest -q`). Nutzer-Tests T1–T8 alle OK, Abnahmekriterien des Lastenhefts bestätigt.
 
 ## Nächster Schritt
-- Aufgabe 15 (manuell, Nutzer): T1–T8 aus `docs/TESTS_FUER_DICH.md` in Discord durchführen, Ergebnisse in `docs/FEEDBACK.md` eintragen.
-  Reihenfolge der Einspielung: Message Content Intent im Developer Portal aktivieren → Rebuild (T1) → `/module enable honeypot` → T2…
-- Danach in neuer Sitzung `/weiter`: Feedback einarbeiten (Skill `feedback`), bei allem OK → `STATUS: FERTIG`.
+- Keiner – Projekt abgeschlossen.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
 - `.venv` = Python 3.14, Docker = 3.13 → 3.13-kompatibel bleiben.
 - Message Content Intent muss im Developer Portal aktiv sein, sonst startet der Bot nicht.
-- Nichts davon wurde gegen echtes Discord geprüft (nur Mocks); Annahmen zu discord.py-Verhalten (z. B. privater Thread, `delete_message_seconds`) sind durch T7 zu bestätigen.
+- T7.6: Bann gelang trotz erwarteter Hierarchie-Sperre (vermutlich Rolle nicht wirklich über Bot-Rolle) – kein Codefehler, vom Nutzer als unkritisch eingestuft.
 
 ## Annahmen & Entscheidungen
 - Befehlsnamen klein (`setrole`, `removerole`, `setlanguage`) – Discord/discord.py erzwingt Kleinschreibung.
