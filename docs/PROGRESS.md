@@ -14,10 +14,11 @@ STATUS: ARBEITET
 - Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün.
 - Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün.
 - Aufgabe 12: `/rolepanel channel` + Tests. 233 Tests grün.
-- Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün.
+- Aufgabe 14: `setlanguage` + Autocomplete + Tests. 249 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 14: `setlanguage` in cog.py (Autocomplete aus `language_names()`, speichern in Großschreibung, `_refresh_panel`; Vorlage: `setlanguage` in `modules/honeypot/cog.py`) + Tests (Details in PLAN.md). Hinweis: `tests/test_rolepanel_cog.py::test_platzhalter_befehl_antwortet` nutzt `setmessage` als Platzhalter → bei Aufgabe 15 Test entfernen.
+- Aufgabe 15: `setmessage` in cog.py (Modal, Absatzfeld vorbefüllt mit aktuellem Text der gesetzten Sprache, max. 1800 Zeichen, speichern in `custom_messages[SPRACHE]`, leer → Eintrag löschen, `_refresh_panel`) + Tests (Details in PLAN.md). Hinweis: `tests/test_rolepanel_cog.py::test_platzhalter_befehl_antwortet` nutzt `setmessage` als Platzhalter → dort Test entfernen (danach nur noch `sethierarchie` Platzhalter).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

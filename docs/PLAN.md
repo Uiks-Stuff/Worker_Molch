@@ -101,7 +101,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   (Kanal ansehen, Nachrichten senden, Verlauf lesen, @everyone erwähnen, Rollen verwalten) → fehlende verständlich melden;
   aktiv setzen + `publish` (Ping nur beim ersten Mal) + anordnen. stop: `remove`, inaktiv. „bereits aktiv/inaktiv“ melden.
   *Abnahme:* Tests: ohne Rollen, Kanal gesetzt / „willkommen“ vorhanden / neu angelegt, Forbidden beim Anlegen, fehlende Rechte, stop, doppelt.
-- [ ] **14. `setlanguage` (A11)**: Autocomplete aus Sprachdatei, speichern, aktives Panel aktualisieren.
+- [x] **14. `setlanguage` (A11)**: Autocomplete aus Sprachdatei, speichern, aktives Panel aktualisieren.
   *Abnahme:* Tests: gültig (klein geschrieben), ungültig, Autocomplete, Nachricht bearbeitet, eigener Text der neuen Sprache wird verwendet.
 - [ ] **15. `setmessage` (A9)**: Modal (Absatzfeld, vorbefüllt, max. 1800 Zeichen damit Platz für 25 Rollen bleibt), speichern pro Sprache,
   leer → Standard; aktives Panel aktualisieren.

@@ -10,7 +10,7 @@ from discord.ext import commands
 from core.errors import UserFacingCheckFailure
 from core.welcome_channel import get_welcome_manager
 
-from .languages import LanguageError, resolve_language, render_panel
+from .languages import LanguageError, language_names, render_panel, resolve_language
 from .storage import RolepanelStorage
 from .views import RoleButton, build_view
 
@@ -322,8 +322,28 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await interaction.followup.send("Alle Rollen wurden aus der Auswahl entfernt.", ephemeral=True)
 
     @app_commands.command(name="setlanguage", description="Setzt die Sprache der Nachricht im Kanal.")
+    @app_commands.describe(language="Sprache laut Sprachdatei, z. B. DEUTSCH")
     async def setlanguage(self, interaction: discord.Interaction, language: str) -> None:
-        await self._not_implemented(interaction)
+        names = language_names()
+        name = language.strip().upper()
+        if name not in names:
+            available = ", ".join(names) or "keine"
+            await interaction.response.send_message(
+                f"Unbekannte Sprache **{language}**. Verfügbar: {available}", ephemeral=True
+            )
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(interaction.guild.id, language=name)
+        await self._refresh_panel(interaction.guild)
+        await interaction.followup.send(f"Sprache auf **{name}** gesetzt.", ephemeral=True)
+
+    @setlanguage.autocomplete("language")
+    async def _language_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice[str]]:
+        current = current.strip().upper()
+        return [app_commands.Choice(name=name, value=name) for name in language_names() if current in name][:25]
 
     @app_commands.command(name="setmessage", description="Bearbeitet den Text der Nachricht im Kanal.")
     async def setmessage(self, interaction: discord.Interaction) -> None:
