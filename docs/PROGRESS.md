@@ -7,9 +7,10 @@ STATUS: ARBEITET
 - Aufgabe 3: Anbieter-Registry, publish/refresh/remove/set_hierarchy/arrange/move_channel + Tests. Bestand: 148 Tests grün.
 - Aufgabe 4: `core/errors.py`, Error-Handler in `main.py` (UserFacingCheckFailure, Label manage_roles) + Tests; T1 eingetragen (Rebuild nötig). 153 Tests grün.
 - Aufgabe 5: `modules/rolepanel/storage.py` + Tests. 159 Tests grün.
+- Aufgabe 6: `modules/rolepanel/languages.py` + `languages.txt` + Tests (`parse_languages` liefert Text-String je Sprache, `render_panel(text, roles)`). 169 Tests grün.
 
 ## Nächster Schritt
-- Aufgabe 6: Sprachdatei `modules/rolepanel/languages.txt` + `languages.py` (Parser, resolve_language, render_panel) + Tests (Details in PLAN.md; Vorlage: `modules/honeypot/languages.py`).
+- Aufgabe 7: `modules/rolepanel/cog.py` – GroupCog `/rolepanel` mit Platzhalter-Befehlen, `setup(bot)`, Anbieter-Anmeldung, `interaction_check` (Save-Role-Prüfung) + Tests (Details in PLAN.md; Vorlage: `modules/honeypot/cog.py`). Ab jetzt hat das Modul eine cog.py und wird von `/module` gefunden.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

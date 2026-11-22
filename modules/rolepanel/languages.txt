@@ -1,0 +1,20 @@
+[DEUTSCH]
+ - @everyone Hallo! hier könnt ihr Rollen wählen, was ihr gerne Machen würdet!
+
+Rolle 1
+Rolle 2
+Rolle ...
+
+[ENGLISH]
+ - @everyone Hello! Here you can choose roles for what you would like to do!
+
+Role 1
+Role 2
+Role ...
+
+[FRANCAIS]
+ - @everyone Bonjour! Ici, vous pouvez choisir des rôles selon ce que vous aimeriez faire!
+
+Rôle 1
+Rôle 2
+Rôle ...

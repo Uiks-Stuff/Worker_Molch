@@ -75,7 +75,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   *Abnahme:* bestehende Tests grün + Tests für die neue Fehlerbehandlung; T1 in TESTS_FUER_DICH (Rebuild, `/ping` und `/honeypot status` funktionieren weiter).
 - [x] **5. Rolepanel-Speicher (A4)**: `modules/rolepanel/__init__.py`, `storage.py` (Felder siehe Architektur, Hierarchie Standard 10).
   *Abnahme:* Tests: Defaults, Roundtrip, Guilds getrennt, unbekannter Schlüssel → Fehler.
-- [ ] **6. Sprachdatei (A5)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft), `[ENGLISH]`, `[FRANCAIS]`; Parser (nur `-`-Zeilen),
+- [x] **6. Sprachdatei (A5)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft), `[ENGLISH]`, `[FRANCAIS]`; Parser (nur `-`-Zeilen),
   `resolve_language` mit Fallback, `render_panel(text, roles)` (Text + Leerzeile + Rollen als Erwähnungen).
   *Abnahme:* Tests: Lastenheft-Beispiel inkl. „Rolle 1…“-Platzhalter, mehrzeilig, Kleinschreibung, leerer Abschnitt, Fallback, keine Rollen.
 - [ ] **7. Gerüst + Save-Role-Prüfung (A1/A7)**: `cog.py` mit `GroupCog` `/rolepanel` (`guild_only`, **kein** `default_permissions`),
