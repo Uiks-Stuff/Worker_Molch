@@ -64,7 +64,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   nutzen, sonst anlegen; `Forbidden` weiterreichen), `handle_channel_deleted` (Kanal + Post-IDs zurücksetzen); Zugriff über
   `get_welcome_manager(bot)` (hängt eine Instanz an den Bot, bleibt bei Modul-Reload erhalten).
   *Abnahme:* Tests: gesetzt / vorhanden (Groß/Klein) / neu angelegt / gelöschter Kanal-ID → Fallback, Kanal gelöscht, gleiche Instanz bei 2 Aufrufen.
-- [ ] **3. Posten + Anordnen (A3/A10/A12)**: Anbieter-Registry (`register`/`unregister`), `publish(guild, key, hierarchy, ping=False)`,
+- [x] **3. Posten + Anordnen (A3/A10/A12)**: Anbieter-Registry (`register`/`unregister`), `publish(guild, key, hierarchy, ping=False)`,
   `refresh` (Text/View bearbeiten; `NotFound` → ohne Ping neu senden), `remove`, `set_hierarchy`, `arrange` (Ist-Reihenfolge nach
   Message-ID vs. Soll nach (hierarchy, key); ab erster Abweichung löschen + neu senden, IDs speichern; nicht registrierte Anbieter bleiben unangetastet),
   `move_channel(guild, channel)` (alte Nachrichten löschen, Kanal setzen, gepostete Anbieter im neuen Kanal geordnet ohne Ping neu senden).

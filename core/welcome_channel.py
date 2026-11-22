@@ -3,9 +3,10 @@ from __future__ import annotations
 import copy
 import json
 import logging
+import inspect
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import discord
 
@@ -91,6 +92,154 @@ class WelcomeChannelManager:
     def __init__(self, bot: Any, storage: WelcomeChannelStorage | None = None) -> None:
         self.bot = bot
         self.storage = storage if storage is not None else WelcomeChannelStorage()
+        # Anbieter-Schlüssel -> render(guild) -> (Text, View | None); darf auch async sein.
+        self.providers: dict[str, Callable[[discord.Guild], Any]] = {}
+
+    # --- Anbieter -----------------------------------------------------------------------
+
+    def register(self, key: str, render: Callable[[discord.Guild], Any]) -> None:
+        """Meldet einen Anbieter an (erneutes Anmelden ersetzt die Render-Funktion, z. B. nach Reload)."""
+        self.providers[key] = render
+
+    def unregister(self, key: str) -> None:
+        """Meldet einen Anbieter ab; seine Nachricht bleibt im Kanal stehen."""
+        self.providers.pop(key, None)
+
+    async def _render(self, guild: discord.Guild, key: str) -> tuple[str, discord.ui.View | None]:
+        result = self.providers[key](guild)
+        if inspect.isawaitable(result):
+            result = await result
+        content, view = result
+        return content, view
+
+    @staticmethod
+    def _mentions(ping: bool) -> discord.AllowedMentions:
+        # Rollen-/Nutzererwähnungen im Text pingen nie; @everyone nur beim ersten Posten.
+        return discord.AllowedMentions(everyone=ping, roles=False, users=False, replied_user=False)
+
+    async def _send(
+        self, guild: discord.Guild, channel: discord.TextChannel, key: str, ping: bool
+    ) -> int | None:
+        """Sendet die Nachricht des Anbieters neu; liefert die Message-ID oder None bei Fehler."""
+        try:
+            content, view = await self._render(guild, key)
+            kwargs: dict[str, Any] = {"content": content, "allowed_mentions": self._mentions(ping)}
+            if view is not None:
+                kwargs["view"] = view
+            message = await channel.send(**kwargs)
+        except discord.HTTPException:
+            logger.exception("Nachricht von '%s' konnte nicht gesendet werden (Guild %s).", key, guild.id)
+            return None
+        return message.id
+
+    async def _delete(self, channel: discord.TextChannel, message_id: int) -> None:
+        try:
+            await channel.get_partial_message(message_id).delete()
+        except discord.NotFound:
+            pass
+        except discord.HTTPException:
+            logger.exception("Nachricht %s konnte nicht gelöscht werden.", message_id)
+
+    def _set_post(self, guild_id: int, key: str, **changes: Any) -> None:
+        settings = self.storage.load(guild_id)
+        post = settings["posts"].get(key)
+        post = dict(post) if isinstance(post, dict) else {"message_id": None, "hierarchy": 10}
+        post.update(changes)
+        settings["posts"][key] = post
+        self.storage.save(guild_id, settings)
+
+    # --- Posten + Anordnen -----------------------------------------------------------------
+
+    async def publish(
+        self, guild: discord.Guild, key: str, hierarchy: int, ping: bool = False
+    ) -> int | None:
+        """Postet bzw. aktualisiert die Nachricht des Anbieters und ordnet den Kanal."""
+        channel = await self.ensure_channel(guild)
+        self._set_post(guild.id, key, hierarchy=hierarchy)
+        post = self.storage.load(guild.id)["posts"][key]
+        if post.get("message_id") is not None:
+            await self.refresh(guild, key)
+        else:
+            message_id = await self._send(guild, channel, key, ping)
+            self._set_post(guild.id, key, message_id=message_id)
+            await self.arrange(guild)
+        return self.storage.load(guild.id)["posts"][key].get("message_id")
+
+    async def refresh(self, guild: discord.Guild, key: str) -> None:
+        """Bearbeitet die gepostete Nachricht; fehlt sie, wird sie ohne Ping neu gesendet."""
+        channel = self.get_channel(guild)
+        post = self.storage.load(guild.id)["posts"].get(key)
+        if channel is None or not isinstance(post, dict) or post.get("message_id") is None:
+            return
+        try:
+            content, view = await self._render(guild, key)
+            await channel.get_partial_message(post["message_id"]).edit(
+                content=content, view=view, allowed_mentions=self._mentions(False)
+            )
+        except discord.NotFound:
+            message_id = await self._send(guild, channel, key, False)
+            self._set_post(guild.id, key, message_id=message_id)
+            await self.arrange(guild)
+        except discord.HTTPException:
+            logger.exception("Nachricht von '%s' konnte nicht bearbeitet werden (Guild %s).", key, guild.id)
+
+    async def remove(self, guild: discord.Guild, key: str) -> None:
+        """Löscht die Nachricht des Anbieters und vergisst den Eintrag."""
+        settings = self.storage.load(guild.id)
+        post = settings["posts"].pop(key, None)
+        self.storage.save(guild.id, settings)
+        channel = self.get_channel(guild)
+        if channel is not None and isinstance(post, dict) and post.get("message_id") is not None:
+            await self._delete(channel, post["message_id"])
+
+    async def set_hierarchy(self, guild: discord.Guild, key: str, hierarchy: int) -> None:
+        """Setzt die Hierarchieebene und ordnet den Kanal neu."""
+        self._set_post(guild.id, key, hierarchy=hierarchy)
+        await self.arrange(guild)
+
+    def _posted(self, guild_id: int) -> list[tuple[str, dict[str, Any]]]:
+        """Gepostete Nachrichten registrierter Anbieter in Soll-Reihenfolge (Ebene, Schlüssel)."""
+        posts = self.storage.load(guild_id)["posts"]
+        items = [
+            (key, post)
+            for key, post in posts.items()
+            if isinstance(post, dict) and post.get("message_id") is not None and key in self.providers
+        ]
+        items.sort(key=lambda item: (item[1].get("hierarchy", 10), item[0]))
+        return items
+
+    async def arrange(self, guild: discord.Guild) -> None:
+        """Ordnet die Bot-Nachrichten: ab der ersten Abweichung löschen und in Soll-Reihenfolge neu senden."""
+        channel = self.get_channel(guild)
+        if channel is None:
+            return
+        desired = self._posted(guild.id)
+        actual = sorted(desired, key=lambda item: item[1]["message_id"])
+        start = next((i for i, (d, a) in enumerate(zip(desired, actual)) if d[0] != a[0]), None)
+        if start is None:
+            return
+        for key, post in desired[start:]:
+            await self._delete(channel, post["message_id"])
+            message_id = await self._send(guild, channel, key, False)
+            self._set_post(guild.id, key, message_id=message_id)
+
+    async def move_channel(self, guild: discord.Guild, channel: discord.TextChannel) -> None:
+        """Wechselt den Kanal: alte Nachrichten löschen, im neuen geordnet ohne Ping neu senden."""
+        old = self.get_channel(guild)
+        settings = self.storage.load(guild.id)
+        if old is not None:
+            for post in settings["posts"].values():
+                if isinstance(post, dict) and post.get("message_id") is not None:
+                    await self._delete(old, post["message_id"])
+        to_resend = [key for key, _ in self._posted(guild.id)]
+        for post in settings["posts"].values():
+            if isinstance(post, dict):
+                post["message_id"] = None
+        settings["channel_id"] = channel.id
+        self.storage.save(guild.id, settings)
+        for key in to_resend:
+            message_id = await self._send(guild, channel, key, False)
+            self._set_post(guild.id, key, message_id=message_id)
 
     def get_channel(self, guild: discord.Guild) -> discord.TextChannel | None:
         """Gibt den gesetzten Kanal zurück oder None (nicht gesetzt bzw. nicht mehr vorhanden)."""
