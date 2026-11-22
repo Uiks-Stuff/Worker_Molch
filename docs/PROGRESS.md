@@ -12,10 +12,11 @@ STATUS: ARBEITET
 - Aufgabe 8: `setrole`/`removerole` + Tests. 189 Tests grün.
 - Aufgabe 9: `userrole`/`clear` (Prüfungen A6, Limit 25, Panel-Update nur wenn aktiv) + Tests. 210 Tests grün.
 - Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün.
-- Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün.
+- Aufgabe 12: `/rolepanel channel` + Tests. Alle Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 12: `/rolepanel channel` in cog.py (Pflichtparameter, gleicher Kanal → Hinweis, Bot-Rechte im neuen Kanal prüfen, `get_welcome_manager(bot).move_channel(guild, channel)`; ohne aktives Panel nur `set_channel`) + Tests (Details in PLAN.md).
+- Aufgabe 13: `start`/`stop` in cog.py (Konstanten `START_BOT_PERMISSIONS`, `_missing_bot_permissions(channel, guild, required)` existieren; zusätzlich serverweit `manage_roles` prüfen; `manager.ensure_channel`/`publish(ping=True beim ersten Mal)`/`remove`) + Tests (Details in PLAN.md).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

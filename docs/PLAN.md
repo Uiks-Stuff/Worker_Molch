@@ -94,7 +94,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **11. Button-Klick (A8)**: Rolle geben/entfernen (`reason` gesetzt), Rückmeldung ephemeral; Rolle nicht mehr wählbar/gelöscht,
   `Forbidden`/Hierarchie → verständliche Meldung, Fehler loggen.
   *Abnahme:* Tests: hinzufügen, entfernen, nicht mehr in Auswahl, gelöscht, Forbidden, Panel einer anderen Guild.
-- [ ] **12. `/rolepanel channel` (A2)**: Pflichtparameter `channel` (TextChannel); gleicher Kanal → Hinweis; Bot-Rechte im neuen Kanal prüfen;
+- [x] **12. `/rolepanel channel` (A2)**: Pflichtparameter `channel` (TextChannel); gleicher Kanal → Hinweis; Bot-Rechte im neuen Kanal prüfen;
   `move_channel` (Panel und Nachrichten anderer Module wandern mit, wenn sie gepostet waren).
   *Abnahme:* Tests: erstmalig setzen, überschreiben mit aktivem Panel (alt gelöscht, neu gesendet), inaktiv (nur gespeichert), gleicher Kanal, fehlende Rechte.
 - [ ] **13. `start` / `stop` (A2/A10)**: start: Fehler ohne wählbare Rollen; Kanal per `ensure_channel`; Bot-Rechte prüfen

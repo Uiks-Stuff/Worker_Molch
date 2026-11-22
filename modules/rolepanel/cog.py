@@ -20,6 +20,15 @@ NOT_IMPLEMENTED = "Dieser Befehl ist noch nicht verfügbar."
 PROVIDER_KEY = "rolepanel"
 MAX_USER_ROLES = 25  # Discord erlaubt höchstens 25 Buttons pro Nachricht.
 
+# Rechte des Bots im Willkommenskanal: (Attribut von discord.Permissions, Anzeigename).
+CHANNEL_BOT_PERMISSIONS = [
+    ("view_channel", "Kanal ansehen"),
+    ("send_messages", "Nachrichten senden"),
+    ("read_message_history", "Nachrichtenverlauf anzeigen"),
+]
+# Zusätzlich für `start`: @everyone erwähnen (Ping beim ersten Posten).
+START_BOT_PERMISSIONS = CHANNEL_BOT_PERMISSIONS + [("mention_everyone", "@everyone erwähnen")]
+
 # Rollen mit diesen Rechten dürfen nicht per Button vergeben werden: (Attribut, Anzeigename).
 DANGEROUS_PERMISSIONS = [
     ("administrator", "Administrator"),
@@ -234,6 +243,14 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
             return "liegt nicht unter deiner höchsten Rolle"
         return None
 
+    @staticmethod
+    def _missing_bot_permissions(
+        channel: discord.TextChannel, guild: discord.Guild, required: list[tuple[str, str]]
+    ) -> list[str]:
+        """Anzeigenamen der Rechte, die der Bot im Kanal braucht, aber nicht hat."""
+        permissions = channel.permissions_for(guild.me)
+        return [label for attribute, label in required if not getattr(permissions, attribute)]
+
     async def _refresh_panel(self, guild: discord.Guild) -> None:
         """Aktualisiert die Panel-Nachricht, wenn das Panel aktiv ist."""
         if self.storage.load(guild.id)["active"]:
@@ -319,8 +336,30 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await self._not_implemented(interaction)
 
     @app_commands.command(name="channel", description="Setzt den gemeinsamen Willkommenskanal.")
+    @app_commands.describe(channel="Neuer Willkommenskanal")
     async def channel(self, interaction: discord.Interaction, channel: discord.TextChannel) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        manager = get_welcome_manager(self.bot)
+        current = manager.get_channel(guild)
+        if current is not None and current.id == channel.id:
+            await interaction.response.send_message(
+                f"{channel.mention} ist bereits der Willkommenskanal.", ephemeral=True
+            )
+            return
+
+        missing = self._missing_bot_permissions(channel, guild, CHANNEL_BOT_PERMISSIONS)
+        if missing:
+            await interaction.response.send_message(
+                f"Mir fehlen in {channel.mention} diese Rechte: **{', '.join(missing)}**. "
+                "Der Willkommenskanal wurde nicht geändert.",
+                ephemeral=True,
+            )
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        # Bereits gepostete Nachrichten aller Module wandern ohne Ping in den neuen Kanal.
+        await manager.move_channel(guild, channel)
+        await interaction.followup.send(f"Willkommenskanal ist jetzt {channel.mention}.", ephemeral=True)
 
     @app_commands.command(name="start", description="Postet die Rollenauswahl im Willkommenskanal.")
     async def start(self, interaction: discord.Interaction) -> None:
