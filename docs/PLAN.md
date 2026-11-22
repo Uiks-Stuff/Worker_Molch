@@ -97,7 +97,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **12. `/rolepanel channel` (A2)**: Pflichtparameter `channel` (TextChannel); gleicher Kanal → Hinweis; Bot-Rechte im neuen Kanal prüfen;
   `move_channel` (Panel und Nachrichten anderer Module wandern mit, wenn sie gepostet waren).
   *Abnahme:* Tests: erstmalig setzen, überschreiben mit aktivem Panel (alt gelöscht, neu gesendet), inaktiv (nur gespeichert), gleicher Kanal, fehlende Rechte.
-- [ ] **13. `start` / `stop` (A2/A10)**: start: Fehler ohne wählbare Rollen; Kanal per `ensure_channel`; Bot-Rechte prüfen
+- [x] **13. `start` / `stop` (A2/A10)**: start: Fehler ohne wählbare Rollen; Kanal per `ensure_channel`; Bot-Rechte prüfen
   (Kanal ansehen, Nachrichten senden, Verlauf lesen, @everyone erwähnen, Rollen verwalten) → fehlende verständlich melden;
   aktiv setzen + `publish` (Ping nur beim ersten Mal) + anordnen. stop: `remove`, inaktiv. „bereits aktiv/inaktiv“ melden.
   *Abnahme:* Tests: ohne Rollen, Kanal gesetzt / „willkommen“ vorhanden / neu angelegt, Forbidden beim Anlegen, fehlende Rechte, stop, doppelt.

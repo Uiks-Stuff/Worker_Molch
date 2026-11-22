@@ -363,11 +363,64 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
 
     @app_commands.command(name="start", description="Postet die Rollenauswahl im Willkommenskanal.")
     async def start(self, interaction: discord.Interaction) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        settings = self.storage.load(guild.id)
+        if settings["active"]:
+            await interaction.response.send_message("Die Rollenauswahl ist bereits aktiv.", ephemeral=True)
+            return
+        selectable = [role_id for role_id in settings["user_role_ids"] if guild.get_role(role_id) is not None]
+        if not selectable:
+            await interaction.response.send_message(
+                "Es sind keine wählbaren Rollen gesetzt. Lege sie zuerst mit `/rolepanel userrole` fest.",
+                ephemeral=True,
+            )
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        manager = get_welcome_manager(self.bot)
+        try:
+            channel = await manager.ensure_channel(guild)
+        except discord.HTTPException:
+            logger.exception("Willkommenskanal konnte in Guild %s nicht angelegt werden.", guild.id)
+            await interaction.followup.send(
+                "Ich konnte den Kanal „willkommen“ nicht anlegen. Mir fehlt vermutlich das Recht "
+                "**Kanäle verwalten** – oder setze mit `/rolepanel channel` selbst einen Kanal.",
+                ephemeral=True,
+            )
+            return
+
+        missing = self._missing_bot_permissions(channel, guild, START_BOT_PERMISSIONS)
+        if not guild.me.guild_permissions.manage_roles:
+            missing.append("Rollen verwalten (serverweit)")
+        if missing:
+            await interaction.followup.send(
+                f"Mir fehlen diese Rechte: **{', '.join(missing)}** (Kanal {channel.mention}). "
+                "Die Rollenauswahl wurde nicht gestartet.",
+                ephemeral=True,
+            )
+            return
+
+        # Ping (@everyone aus dem Text) nur, weil die Nachricht neu gepostet wird; Bearbeiten pingt nie.
+        message_id = await manager.publish(guild, PROVIDER_KEY, settings["hierarchy"], ping=True)
+        if message_id is None:
+            await interaction.followup.send(
+                f"Die Nachricht konnte in {channel.mention} nicht gesendet werden. Details stehen im Bot-Log.",
+                ephemeral=True,
+            )
+            return
+        self.storage.update(guild.id, active=True)
+        await interaction.followup.send(f"Rollenauswahl gestartet in {channel.mention}.", ephemeral=True)
 
     @app_commands.command(name="stop", description="Entfernt die Rollenauswahl-Nachricht.")
     async def stop(self, interaction: discord.Interaction) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        if not self.storage.load(guild.id)["active"]:
+            await interaction.response.send_message("Die Rollenauswahl ist nicht aktiv.", ephemeral=True)
+            return
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(guild.id, active=False)
+        await get_welcome_manager(self.bot).remove(guild, PROVIDER_KEY)
+        await interaction.followup.send("Rollenauswahl gestoppt, die Nachricht wurde entfernt.", ephemeral=True)
 
 
 async def setup(bot: commands.Bot) -> None:

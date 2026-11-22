@@ -13,10 +13,11 @@ STATUS: ARBEITET
 - Aufgabe 9: `userrole`/`clear` (Prüfungen A6, Limit 25, Panel-Update nur wenn aktiv) + Tests. 210 Tests grün.
 - Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün.
 - Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün.
-- Aufgabe 12: `/rolepanel channel` + Tests. Alle Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 12: `/rolepanel channel` + Tests. 233 Tests grün.
+- Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 13: `start`/`stop` in cog.py (Konstanten `START_BOT_PERMISSIONS`, `_missing_bot_permissions(channel, guild, required)` existieren; zusätzlich serverweit `manage_roles` prüfen; `manager.ensure_channel`/`publish(ping=True beim ersten Mal)`/`remove`) + Tests (Details in PLAN.md).
+- Aufgabe 14: `setlanguage` in cog.py (Autocomplete aus `language_names()`, speichern in Großschreibung, `_refresh_panel`; Vorlage: `setlanguage` in `modules/honeypot/cog.py`) + Tests (Details in PLAN.md). Hinweis: `tests/test_rolepanel_cog.py::test_platzhalter_befehl_antwortet` nutzt `setmessage` als Platzhalter → bei Aufgabe 15 Test entfernen.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
