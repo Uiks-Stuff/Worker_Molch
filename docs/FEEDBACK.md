@@ -49,10 +49,15 @@ T10 - 3. kann nicht geprüft werden, Bot hat Admin Rechte, ist aber egal
 T11 - 1. passt, passt
 T11 - 2. passt
 
-T12 - 1. false, Nachricht wir nach manuellem löschen nicht neu generiert bei Sprachwechsel oder erneutem /rolepanel start [erledigt, siehe T14]
+T12 - 1. [erledigt, siehe T14]
 T12 - 2. passt
 
 T13 - 1. passt
 
+T14 - 1. passt
+T14 - 2. passt
+T14 - 3. passt
+T14 - 4. passt
+
 Was fehlt:
-es fehlt noch ein Command /rolepanel info, der die Gruppen und den Channel anzeigt [erledigt, siehe T14]
+[erledigt, siehe T14]

@@ -1,4 +1,4 @@
-STATUS: WARTE_AUF_FEEDBACK
+STATUS: ARBEITET
 
 ## Zuletzt erledigt
 - Plan für Modul `rolepanel` (`docs/PLAN.md`, Aufgaben 1–19) erstellt und vom Nutzer freigegeben.
