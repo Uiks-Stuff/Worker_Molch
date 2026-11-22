@@ -111,7 +111,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **17. Robustheit + Integration (A12/A4)**: Listener `on_guild_role_delete`, `on_guild_channel_delete`; Integrationstest
   start → Klick → Rolle → Sprache wechseln → stop; neues Cog mit gleichen Dateien kennt den Zustand.
   *Abnahme:* Tests grün.
-- [ ] **18. Doku**: README (Modul `rolepanel`, Befehle, Save-Roles = Zugriff auf Befehle, Bot-Recht „Rollen verwalten“, Bot-Rolle über den wählbaren Rollen,
+- [x] **18. Doku**: README (Modul `rolepanel`, Befehle, Save-Roles = Zugriff auf Befehle, Bot-Recht „Rollen verwalten“, Bot-Rolle über den wählbaren Rollen,
   Willkommenskanal/Hierarchie für künftige Module); TESTS_FUER_DICH vollständig (T1…).
   *Abnahme:* README aktualisiert, Tests T1… nummeriert mit Einspiel-Anleitung.
 - [ ] **19. (manuell)** Tests aus `docs/TESTS_FUER_DICH.md` in Discord durchführen, Ergebnis in `docs/FEEDBACK.md`.

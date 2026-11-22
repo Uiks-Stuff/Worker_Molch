@@ -94,6 +94,38 @@ Alle Befehle sind nur auf Servern nutzbar, nur für Mitglieder mit **Mitglieder 
 - Die Einstellungen liegen in `data/honeypot.json`; das Verzeichnis `data` muss für den Docker-Benutzer beschreibbar sein (siehe 5.3).
 - Nach Änderungen an `main.py` (Intents) ist ein Neubau nötig: `sudo docker compose up -d --build`.
 
+### Modul `rolepanel`
+
+Der Bot postet im Willkommenskanal eine Nachricht mit einem Button pro wählbarer Rolle. Jedes Mitglied kann sich per Klick die Rolle geben und per erneutem Klick wieder entfernen. Aktivieren mit `/module enable modul:rolepanel`.
+
+| Befehl | Beschreibung |
+|---|---|
+| `/rolepanel start` | Postet die Rollenauswahl. Ist kein Kanal gesetzt, wird ein vorhandener Textkanal „willkommen“ genutzt oder neu angelegt. Fehler, wenn keine wählbaren Rollen gesetzt sind. |
+| `/rolepanel stop` | Entfernt die Nachricht und beendet die Rollenauswahl. |
+| `/rolepanel userrole rolle1:@Rolle [rolle2 … rolle5]` | Schaltet Rollen in der Auswahl an oder aus (je Rolle umschalten). Höchstens 25 Rollen. |
+| `/rolepanel clear` | Entfernt alle Rollen aus der Auswahl. |
+| `/rolepanel setrole rolle1:@Rolle [rolle2 … rolle5]` | Fügt Save-Roles hinzu: nur diese (sowie Servereigentümer und Administratoren) dürfen die `/rolepanel`-Befehle nutzen. |
+| `/rolepanel removerole rolle1:@Rolle [rolle2 … rolle5]` | Entfernt Save-Roles. |
+| `/rolepanel setlanguage language:DEUTSCH` | Setzt die Sprache der Nachricht (Autocomplete aus der Sprachdatei); die Nachricht im Kanal wird sofort angepasst. |
+| `/rolepanel setmessage` | Öffnet ein Formular zum Ändern des Nachrichtentextes der aktuellen Sprache; leeres Feld = Standardtext. |
+| `/rolepanel sethierarchie ebene:10` | Hierarchieebene des Moduls im Willkommenskanal (1–100, Standard 10; **kleinere Zahl = weiter oben**). |
+| `/rolepanel channel channel:#kanal` | Setzt bzw. überschreibt den gemeinsamen Willkommenskanal; vorhandene Bot-Nachrichten ziehen ohne Ping um. |
+
+Die Befehle sind nur auf Servern nutzbar und antworten nur für den Ausführenden sichtbar. Sie sind in Discord für alle sichtbar; ohne Save-Role (und ohne Eigentümer-/Administratorrecht) kommt eine verständliche Meldung. Die Buttons dürfen alle Mitglieder nutzen; die Rückmeldung (`➕ @Rolle` / `➖ @Rolle`) sieht nur der Klickende.
+
+**Wählbare Rollen:** Abgelehnt werden `@everyone`, von Bots/Integrationen verwaltete Rollen, Rollen mit Admin-/Moderationsrechten (Administrator, Server/Rollen/Kanäle verwalten, Bannen, Kicken, Nachrichten verwalten, @everyone erwähnen), Rollen auf oder über der höchsten Bot-Rolle und Rollen auf oder über der eigenen höchsten Rolle (außer Eigentümer/Administrator).
+
+**Willkommenskanal & Hierarchie (für künftige Module):** Der Kanal ist ein gemeinsamer Dienst (`core/welcome_channel.py`, `get_welcome_manager(bot)`). Module melden sich per `register(schlüssel, render)` an und posten über `publish`; der Bot ordnet alle Nachrichten nach Hierarchieebene (bei gleicher Ebene nach Schlüssel). Da Discord Nachrichten nicht verschieben kann, werden falsch platzierte Bot-Nachrichten gelöscht und in richtiger Reihenfolge neu gesendet; Nachrichten von Mitgliedern bleiben unberührt. `@everyone` pingt nur beim Posten durch `start`, nie beim Bearbeiten oder Neuordnen.
+
+**Sprachdatei:** `modules/rolepanel/languages.txt`, Format `[NAME]` gefolgt von Zeilen ` - …` (Nachrichtentext, mehrere Zeilen möglich). Zeilen ohne `-` (z. B. „Rolle 1“) sind nur Platzhalter; die Liste der Rollen hängt der Bot automatisch an. Neue Sprachen als weiteren Abschnitt anfügen – kein Reload nötig. Entfernte Sprache → Fallback DEUTSCH.
+
+**Voraussetzungen:**
+- Bot-Recht **Rollen verwalten** (serverweit); die Bot-Rolle muss **über** allen wählbaren Rollen stehen.
+- Bot-Rechte im Willkommenskanal: Kanal ansehen, Nachrichten senden, Nachrichtenverlauf anzeigen, @everyone erwähnen. Zum automatischen Anlegen des Kanals braucht der Bot **Kanäle verwalten**. Fehlende Rechte meldet `/rolepanel start`.
+- Der Kern wurde erweitert (`core/`, `main.py`): einmalig `sudo docker compose up -d --build` nötig.
+- Die Einstellungen liegen in `data/rolepanel.json` und `data/welcome_channel.json`; `data` muss für den Docker-Benutzer beschreibbar sein.
+- Wird der Willkommenskanal gelöscht, ist die Rollenauswahl inaktiv (mit `/rolepanel start` neu starten); gelöschte Rollen verschwinden automatisch aus Auswahl und Save-Roles; eine manuell gelöschte Nachricht wird beim nächsten Update ohne Ping neu gesendet.
+
 ---
 
 ## Was wird benötigt?

@@ -1,48 +1,40 @@
-STATUS: ARBEITET
+STATUS: WARTE_AUF_FEEDBACK
 
 ## Zuletzt erledigt
-- Plan für Modul `rolepanel` erstellt (`docs/PLAN.md`, Aufgaben 1–19) und nach Nutzer-Antworten angepasst; vom Nutzer freigegeben.
-- Aufgabe 1: `core/welcome_channel.py` (`WelcomeChannelStorage`) + Tests. 
-- Aufgabe 2: `WelcomeChannelManager` (get/set/ensure_channel, handle_channel_deleted, `get_welcome_manager`) + Tests. Bestand: 132 Tests grün.
-- Aufgabe 3: Anbieter-Registry, publish/refresh/remove/set_hierarchy/arrange/move_channel + Tests. Bestand: 148 Tests grün.
-- Aufgabe 4: `core/errors.py`, Error-Handler in `main.py` (UserFacingCheckFailure, Label manage_roles) + Tests; T1 eingetragen (Rebuild nötig). 153 Tests grün.
-- Aufgabe 5: `modules/rolepanel/storage.py` + Tests. 159 Tests grün.
-- Aufgabe 6: `modules/rolepanel/languages.py` + `languages.txt` + Tests (`parse_languages` liefert Text-String je Sprache, `render_panel(text, roles)`). 169 Tests grün.
-- Aufgabe 7: `modules/rolepanel/cog.py` (GroupCog, 10 Platzhalter-Befehle, `render`, Anbieter-An-/Abmeldung, `interaction_check`) + Tests. 184 Tests grün.
-- Aufgabe 8: `setrole`/`removerole` + Tests. 189 Tests grün.
-- Aufgabe 9: `userrole`/`clear` (Prüfungen A6, Limit 25, Panel-Update nur wenn aktiv) + Tests. 210 Tests grün.
-- Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün.
-- Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün.
-- Aufgabe 12: `/rolepanel channel` + Tests. 233 Tests grün.
-- Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün.
-- Aufgabe 14: `setlanguage` + Autocomplete + Tests. 249 Tests grün.
-- Aufgabe 15: `setmessage` (Modal `MessageModal` in views.py, `apply_message` im Cog) + Tests. 258 Tests grün.
-- Aufgabe 16: `sethierarchie` + Tests; Platzhalter-Code entfernt, alle 10 Befehle implementiert. 261 Tests grün.
-- Aufgabe 17: Listener (Rolle/Kanal gelöscht) + Integrationstests. Alle Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Plan für Modul `rolepanel` (`docs/PLAN.md`, Aufgaben 1–19) erstellt und vom Nutzer freigegeben.
+- Aufgaben 1–3: gemeinsamer Willkommenskanal-Dienst `core/welcome_channel.py` (Speicher, Kanalverwaltung, Anbieter-Registry,
+  publish/refresh/remove/set_hierarchy/arrange/move_channel).
+- Aufgabe 4: `core/errors.py` (`UserFacingCheckFailure`), Error-Handler in `main.py`, Label `manage_roles`.
+- Aufgaben 5–17: Modul `modules/rolepanel/` komplett (storage, languages, views, cog mit allen 10 Befehlen, Buttons als
+  `DynamicItem`, Modal für `setmessage`, Listener für gelöschte Rollen/Kanäle) + Tests. Bestand: 268 Tests grün.
+- Aufgabe 18: README (Modul `rolepanel`) und `docs/TESTS_FUER_DICH.md` (T1–T13) geschrieben.
 
 ## Nächster Schritt
-- Aufgabe 18: Doku – README (Modul `rolepanel`, Befehle, Save-Roles = Zugriff, Bot-Recht „Rollen verwalten“, Bot-Rolle über wählbaren Rollen, Willkommenskanal/Hierarchie für künftige Module) und `docs/TESTS_FUER_DICH.md` vollständig (T1 existiert schon; T2… für alle Befehle/Buttons/Sprache/Kanalwechsel/Hierarchie; Einspielen: Modul → `/module enable rolepanel`; Hinweis, dass `config/modules.json` das Modul noch nicht enthält). Danach Aufgabe 19 = manuell → STATUS: WARTE_AUF_FEEDBACK.
+- Aufgabe 19 (manuell, Nutzer): zuerst Rebuild (T1: `cd /home/uik/projects/Worker_Molch && sudo docker compose up -d --build`),
+  dann `/module enable modul:rolepanel` und T2–T13 aus `docs/TESTS_FUER_DICH.md` durchführen; Ergebnisse in `docs/FEEDBACK.md`.
+- Danach in neuer Sitzung `/weiter`: Feedback einarbeiten; bei lauter OK → STATUS: FERTIG, Modul nach `docs/archiv/` archivieren.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
 - `.venv` = Python 3.14, Docker = 3.13 → 3.13-kompatibel bleiben.
+- Hierarchie-Anordnung (T9) ist ohne zweites Modul nur eingeschränkt manuell prüfbar (durch Unit-Tests abgedeckt).
 
 ## Annahmen & Entscheidungen
 - Save-Roles = Zugriff auf die `/rolepanel`-Befehle (Nutzer). Zusätzlich immer erlaubt: Servereigentümer + Administrator
-  (Annahme, sonst kann niemand die erste Save-Role setzen). Daher kein `default_permissions`, Prüfung im Bot.
-- Buttons dürfen alle Mitglieder nutzen (Nutzer).
-- Hierarchie: kleinere Zahl = weiter oben (Nutzer). Bereich 1–100, Standard 10.
-- `/rolepanel channel` zusätzlich (Nutzer): Pflichtparameter, überschreibt gesetzten Kanal; Bot-Nachrichten aller registrierten
-  Module ziehen ohne Ping in den neuen Kanal um (Annahme). Kein `/rolepanel status` (nur `channel` gewünscht).
+  (Annahme, sonst kann niemand die erste Save-Role setzen). Kein `default_permissions`, Prüfung im Bot (`interaction_check`).
+- Buttons dürfen alle Mitglieder nutzen (Nutzer). Rückmeldung sprachneutral (➕/➖); persistent über `DynamicItem`.
+- Hierarchie: kleinere Zahl = weiter oben (Nutzer). Bereich 1–100, Standard 10. Bei Änderung nur Neuordnung, wenn Panel aktiv.
+- `/rolepanel channel` (Nutzer): Pflichtparameter, überschreibt Kanal; Bot-Nachrichten aller Module ziehen ohne Ping um (Annahme).
 - Willkommenskanal + Anordnung als gemeinsamer Dienst in `core/welcome_channel.py` (Nutzer ok, Rebuild nötig).
-  `core/errors.py` → `UserFacingCheckFailure`, deren Text der Error-Handler in `main.py` anzeigt.
 - Befehlsnamen klein; „setmassage“ → `setmessage`, „sethierarchie“ bleibt.
-- Kein Kanal gesetzt → `start` nutzt vorhandenen „willkommen“ oder legt ihn an (Discord schreibt Kanalnamen klein).
+- Kein Kanal gesetzt → `start` nutzt vorhandenen „willkommen“ oder legt ihn an.
 - Anordnen = falsch platzierte Bot-Nachrichten löschen und neu senden; User-Nachrichten bleiben unberührt.
 - Sprachdatei: nur Zeilen mit `-` sind Text; „Rolle 1…“ = Platzhalter, Rollenliste wird automatisch angehängt.
-- Eigener Text per `setmessage` gilt pro Sprache; leeres Feld = Standardtext. Eingabe per Modal.
+- Eigener Text per `setmessage` gilt pro Sprache; leer oder unverändert = Standardtext. Max. 1800 Zeichen.
 - `userrole` lehnt gefährliche Rollen ab (Admin-/Moderationsrechte, ≥ Bot-Rolle, ≥ eigene Rolle außer Eigentümer/Admin,
-  verwaltet, @everyone). Max. 25 Rollen.
-- Button-Rückmeldung sprachneutral (➕/➖); Buttons persistent über `DynamicItem`.
-- `@everyone` pingt nur beim ersten Posten (wie Honeypot).
+  verwaltet, @everyone). Max. 25 Rollen. Entfernen ist immer erlaubt. Beim Klick wird die Rolle erneut geprüft (ohne Nutzer-Hierarchie).
+- `@everyone` pingt nur beim (Neu-)Posten durch `start`; nach `stop` + `start` wird neu gepostet und damit erneut gepingt
+  (weil `stop` die Nachricht löscht – Annahme). Bearbeiten/Neuordnen/Kanalwechsel pingen nie.
+- `stop` löscht die Nachricht; Kanal gelöscht → Panel inaktiv; Rolle gelöscht → aus Auswahl/Save-Roles entfernt, Panel aktualisiert.
 - Speicherung `data/rolepanel.json` und `data/welcome_channel.json` pro Guild; `tests/` ist laut `.gitignore` nicht versioniert.
+- `config/modules.json` wurde nicht geändert; Aktivierung per `/module enable modul:rolepanel` durch den Nutzer.
