@@ -51,8 +51,49 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         self.bot.remove_dynamic_items(RoleButton)
 
     async def handle_click(self, interaction: discord.Interaction, role_id: int) -> None:
-        """Button-Klick: Rolle geben oder entfernen (Aufgabe 11)."""
-        await self._not_implemented(interaction)
+        """Button-Klick: Rolle dem Klickenden geben oder wieder entfernen."""
+        guild = interaction.guild
+        member = interaction.user
+        if guild is None:
+            await interaction.response.send_message("Das geht nur auf einem Server.", ephemeral=True)
+            return
+
+        role = guild.get_role(role_id)
+        if role is None:
+            await interaction.response.send_message("Diese Rolle gibt es nicht mehr.", ephemeral=True)
+            return
+        selectable = role_id in self.storage.load(guild.id)["user_role_ids"]
+        if not selectable or self._role_problem(role, interaction, check_user=False):
+            await interaction.response.send_message(
+                f"{role.mention} ist nicht mehr zur Auswahl freigegeben.", ephemeral=True
+            )
+            return
+
+        has_role = any(r.id == role_id for r in member.roles)
+        try:
+            if has_role:
+                await member.remove_roles(role, reason="Rolepanel: Rolle per Button entfernt")
+            else:
+                await member.add_roles(role, reason="Rolepanel: Rolle per Button gewählt")
+        except discord.Forbidden:
+            logger.warning("Rolle %s konnte auf Guild %s nicht vergeben werden (Forbidden).", role_id, guild.id)
+            await interaction.response.send_message(
+                f"Ich darf {role.mention} nicht vergeben. Meine Rolle muss über dieser Rolle stehen "
+                "und ich brauche das Recht **Rollen verwalten**. Bitte melde das einem Administrator.",
+                ephemeral=True,
+            )
+            return
+        except discord.HTTPException:
+            logger.exception("Rolle %s konnte auf Guild %s nicht geändert werden.", role_id, guild.id)
+            await interaction.response.send_message(
+                "Die Rolle konnte gerade nicht geändert werden. Bitte versuche es später erneut.",
+                ephemeral=True,
+            )
+            return
+
+        await interaction.response.send_message(
+            f"{'➖' if has_role else '➕'} {role.mention}", ephemeral=True
+        )
 
     async def render(self, guild: discord.Guild) -> tuple[str, discord.ui.View | None]:
         """Text (und später Buttons) der Panel-Nachricht aus dem gespeicherten Zustand."""
@@ -173,7 +214,9 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @staticmethod
-    def _role_problem(role: discord.Role, interaction: discord.Interaction) -> str | None:
+    def _role_problem(
+        role: discord.Role, interaction: discord.Interaction, check_user: bool = True
+    ) -> str | None:
         """Grund, warum die Rolle nicht wählbar sein darf (Schutz vor Rechteausweitung), sonst None."""
         guild = interaction.guild
         if role.is_default() or role.managed:
@@ -183,6 +226,8 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
             return "hat Admin-/Moderationsrechte (" + ", ".join(dangerous) + ")"
         if role.position >= guild.me.top_role.position:
             return "liegt nicht unter meiner höchsten Rolle"
+        if not check_user:
+            return None
         user = interaction.user
         privileged = guild.owner_id == user.id or user.guild_permissions.administrator
         if not privileged and role.position >= user.top_role.position:

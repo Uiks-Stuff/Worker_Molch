@@ -91,7 +91,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **10. Buttons (A8)**: `views.py` – `DynamicItem` (Label = Rollenname, max. 80 Zeichen), Registrierung via `bot.add_dynamic_items`
   in `cog_load` / Entfernen in `cog_unload`; `render(guild)` baut Text + View aus Speicher und Sprache.
   *Abnahme:* Tests: custom_id-Format, View aus gespeicherten Rollen (gelöschte ausgelassen), Reihenfolge, 25er-Grenze.
-- [ ] **11. Button-Klick (A8)**: Rolle geben/entfernen (`reason` gesetzt), Rückmeldung ephemeral; Rolle nicht mehr wählbar/gelöscht,
+- [x] **11. Button-Klick (A8)**: Rolle geben/entfernen (`reason` gesetzt), Rückmeldung ephemeral; Rolle nicht mehr wählbar/gelöscht,
   `Forbidden`/Hierarchie → verständliche Meldung, Fehler loggen.
   *Abnahme:* Tests: hinzufügen, entfernen, nicht mehr in Auswahl, gelöscht, Forbidden, Panel einer anderen Guild.
 - [ ] **12. `/rolepanel channel` (A2)**: Pflichtparameter `channel` (TextChannel); gleicher Kanal → Hinweis; Bot-Rechte im neuen Kanal prüfen;

@@ -11,10 +11,11 @@ STATUS: ARBEITET
 - Aufgabe 7: `modules/rolepanel/cog.py` (GroupCog, 10 Platzhalter-Befehle, `render`, Anbieter-An-/Abmeldung, `interaction_check`) + Tests. 184 Tests grün.
 - Aufgabe 8: `setrole`/`removerole` + Tests. 189 Tests grün.
 - Aufgabe 9: `userrole`/`clear` (Prüfungen A6, Limit 25, Panel-Update nur wenn aktiv) + Tests. 210 Tests grün.
-- Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 10: `views.py` (`RoleButton` DynamicItem, `build_view`), `render` liefert View, Registrierung in cog_load/unload + Tests. 219 Tests grün.
+- Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 11: Button-Klick `Rolepanel.handle_click(interaction, role_id)` in cog.py umsetzen (aktuell Platzhalter; `RoleButton.callback` ruft ihn über `bot.get_cog("rolepanel")`) + Tests (Details in PLAN.md).
+- Aufgabe 12: `/rolepanel channel` in cog.py (Pflichtparameter, gleicher Kanal → Hinweis, Bot-Rechte im neuen Kanal prüfen, `get_welcome_manager(bot).move_channel(guild, channel)`; ohne aktives Panel nur `set_channel`) + Tests (Details in PLAN.md).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
