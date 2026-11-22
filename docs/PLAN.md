@@ -70,7 +70,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   `move_channel(guild, channel)` (alte Nachrichten löschen, Kanal setzen, gepostete Anbieter im neuen Kanal geordnet ohne Ping neu senden).
   *Abnahme:* Tests: erstes Posten mit/ohne Ping, Bearbeiten ohne Ping, NotFound → neu, remove, Reihenfolge 5/10/20 bei verschiedener
   Ankunft, gleiche Ebene stabil, bereits richtig → keine API-Aufrufe, move_channel, HTTP-Fehler werden geloggt statt geworfen.
-- [ ] **4. Core einbinden (A1/A7)**: `core/errors.py` mit `UserFacingCheckFailure`; Error-Handler in `main.py` zeigt deren Text an
+- [x] **4. Core einbinden (A1/A7)**: `core/errors.py` mit `UserFacingCheckFailure`; Error-Handler in `main.py` zeigt deren Text an
   (Log nur auf Info-Ebene); Label `manage_roles: "Rollen verwalten"` ergänzen.
   *Abnahme:* bestehende Tests grün + Tests für die neue Fehlerbehandlung; T1 in TESTS_FUER_DICH (Rebuild, `/ping` und `/honeypot status` funktionieren weiter).
 - [ ] **5. Rolepanel-Speicher (A4)**: `modules/rolepanel/__init__.py`, `storage.py` (Felder siehe Architektur, Hierarchie Standard 10).

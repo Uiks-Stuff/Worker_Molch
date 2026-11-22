@@ -9,6 +9,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from core.errors import UserFacingCheckFailure
 from core.module_commands import ModuleCommands
 from core.module_manager import ModuleManager
 
@@ -105,11 +106,15 @@ async def on_app_command_error(
     interaction: discord.Interaction,
     error: app_commands.AppCommandError,
 ) -> None:
-    if isinstance(error, app_commands.MissingPermissions):
+    if isinstance(error, UserFacingCheckFailure):
+        message = str(error)
+        logger.info("Befehl abgelehnt für %s: %s", interaction.user, message)
+    elif isinstance(error, app_commands.MissingPermissions):
         labels = {
             "manage_messages": "Nachrichten verwalten",
             "manage_guild": "Server verwalten",
             "ban_members": "Mitglieder bannen",
+            "manage_roles": "Rollen verwalten",
         }
         missing = ", ".join(labels.get(permission, permission) for permission in error.missing_permissions)
         message = f"Dir fehlen die erforderlichen Berechtigungen: **{missing}**."
