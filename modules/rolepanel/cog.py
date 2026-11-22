@@ -68,7 +68,18 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
     async def _not_implemented(self, interaction: discord.Interaction) -> None:
         await interaction.response.send_message(NOT_IMPLEMENTED, ephemeral=True)
 
+    @staticmethod
+    def _unique_roles(*roles: discord.Role | None) -> list[discord.Role]:
+        """Übergebene Rollen ohne Duplikate und ohne leere Parameter."""
+        unique: dict[int, discord.Role] = {}
+        for role in roles:
+            if role is not None:
+                unique.setdefault(role.id, role)
+        return list(unique.values())
+
     @app_commands.command(name="setrole", description="Fügt Save-Roles hinzu (Zugriff auf die Rolepanel-Befehle).")
+    @app_commands.describe(rolle1="Erste Rolle", rolle2="Weitere Rolle", rolle3="Weitere Rolle",
+                           rolle4="Weitere Rolle", rolle5="Weitere Rolle")
     async def setrole(
         self,
         interaction: discord.Interaction,
@@ -78,9 +89,38 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         rolle4: discord.Role | None = None,
         rolle5: discord.Role | None = None,
     ) -> None:
-        await self._not_implemented(interaction)
+        settings = self.storage.load(interaction.guild.id)
+        current: list[int] = list(settings["save_role_ids"])
+        added: list[discord.Role] = []
+        existing: list[discord.Role] = []
+        rejected: list[discord.Role] = []
+        for role in self._unique_roles(rolle1, rolle2, rolle3, rolle4, rolle5):
+            if role.is_default() or role.managed:
+                rejected.append(role)
+            elif role.id in current:
+                existing.append(role)
+            else:
+                current.append(role.id)
+                added.append(role)
+
+        if added:
+            self.storage.update(interaction.guild.id, save_role_ids=current)
+
+        lines = []
+        if added:
+            lines.append("Hinzugefügt: " + ", ".join(role.mention for role in added))
+        if existing:
+            lines.append("Bereits Save-Role: " + ", ".join(role.mention for role in existing))
+        if rejected:
+            lines.append(
+                "Nicht erlaubt (@everyone oder von einer Integration/einem Bot verwaltet): "
+                + ", ".join(role.mention for role in rejected)
+            )
+        await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @app_commands.command(name="removerole", description="Entfernt Save-Roles.")
+    @app_commands.describe(rolle1="Erste Rolle", rolle2="Weitere Rolle", rolle3="Weitere Rolle",
+                           rolle4="Weitere Rolle", rolle5="Weitere Rolle")
     async def removerole(
         self,
         interaction: discord.Interaction,
@@ -90,7 +130,26 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         rolle4: discord.Role | None = None,
         rolle5: discord.Role | None = None,
     ) -> None:
-        await self._not_implemented(interaction)
+        settings = self.storage.load(interaction.guild.id)
+        current: list[int] = list(settings["save_role_ids"])
+        removed: list[discord.Role] = []
+        missing: list[discord.Role] = []
+        for role in self._unique_roles(rolle1, rolle2, rolle3, rolle4, rolle5):
+            if role.id in current:
+                current.remove(role.id)
+                removed.append(role)
+            else:
+                missing.append(role)
+
+        if removed:
+            self.storage.update(interaction.guild.id, save_role_ids=current)
+
+        lines = []
+        if removed:
+            lines.append("Entfernt: " + ", ".join(role.mention for role in removed))
+        if missing:
+            lines.append("Keine Save-Role: " + ", ".join(role.mention for role in missing))
+        await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @app_commands.command(name="userrole", description="Schaltet Rollen in der Auswahl an oder aus.")
     async def userrole(

@@ -83,7 +83,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   `interaction_check` des Cogs: Eigentümer, Administrator oder Save-Role → erlaubt, sonst `UserFacingCheckFailure`.
   *Abnahme:* Tests: Befehlsnamen klein und vollständig, Extension lädt (Smoke), Registry an/ab;
   Prüfung: Eigentümer / Admin / Save-Role erlaubt, normales Mitglied und Mitglied mit `manage_roles` ohne Save-Role abgelehnt.
-- [ ] **8. `setrole` / `removerole` (A7)**: speichern/entfernen, Duplikate und nicht gesetzte Rollen melden, `@everyone`/verwaltete Rollen ablehnen.
+- [x] **8. `setrole` / `removerole` (A7)**: speichern/entfernen, Duplikate und nicht gesetzte Rollen melden, `@everyone`/verwaltete Rollen ablehnen.
   *Abnahme:* Tests hinzufügen, entfernen, Duplikate, Ablehnungen.
 - [ ] **9. `userrole` / `clear` (A6)**: umschalten mit Prüfungen laut A6, Limit 25; bei aktivem Panel Nachricht aktualisieren
   (nach `clear` bleibt das Panel ohne Buttons stehen *(Annahme)*).
