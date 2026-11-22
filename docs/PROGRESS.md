@@ -2,10 +2,10 @@ STATUS: ARBEITET
 
 ## Zuletzt erledigt
 - Plan für Modul `rolepanel` erstellt (`docs/PLAN.md`, Aufgaben 1–19) und nach Nutzer-Antworten angepasst; vom Nutzer freigegeben.
-- Bestand: 119 Tests grün.
+- Aufgabe 1: `core/welcome_channel.py` (`WelcomeChannelStorage`) + Tests. Bestand: 125 Tests grün.
 
 ## Nächster Schritt
-- Aufgabe 1: `core/welcome_channel.py` – Speicherklasse für `data/welcome_channel.json` + Tests.
+- Aufgabe 2: `WelcomeChannelManager` (get/set/ensure_channel, handle_channel_deleted, `get_welcome_manager(bot)`) in `core/welcome_channel.py` + Tests.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

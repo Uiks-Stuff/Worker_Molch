@@ -57,7 +57,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   Verweise zurücksetzen; manuell gelöschte Panel-Nachricht → beim nächsten Update ohne Ping neu senden.
 
 ## Aufgaben
-- [ ] **1. Willkommenskanal-Speicher (A2/A4)**: `core/welcome_channel.py` – Speicherklasse für `data/welcome_channel.json`
+- [x] **1. Willkommenskanal-Speicher (A2/A4)**: `core/welcome_channel.py` – Speicherklasse für `data/welcome_channel.json`
   (Defaults, laden/speichern pro Guild, atomar).
   *Abnahme:* Tests: fehlende/defekte Datei → Defaults, Roundtrip, Guilds getrennt, `data/` wird angelegt.
 - [ ] **2. Kanalverwaltung (A2/A12)**: `WelcomeChannelManager.get_channel/set_channel/ensure_channel` (vorhandenen „willkommen“
