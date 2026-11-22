@@ -35,7 +35,7 @@ T7 - 2. passt
 T7 - 3. passt
 T7 - 4. passt
 
-T8 - 1. passt, hier noch die Buttons in der Farbe der jeweiligen Rolle anzeigen bitte
+T8 - 1. passt, hier noch die Buttons in der Farbe der jeweiligen Rolle anzeigen bitte [erledigt, siehe T14: nächstliegende der 4 Discord-Farben]
 T8 - 2. passt
 T8 - 3. passt
  
@@ -49,10 +49,10 @@ T10 - 3. kann nicht geprüft werden, Bot hat Admin Rechte, ist aber egal
 T11 - 1. passt, passt
 T11 - 2. passt
 
-T12 - 1. false, Nachricht wir nach manuellem löschen nicht neu generiert bei Sprachwechsel oder erneutem /rolepanel start
+T12 - 1. false, Nachricht wir nach manuellem löschen nicht neu generiert bei Sprachwechsel oder erneutem /rolepanel start [erledigt, siehe T14]
 T12 - 2. passt
 
 T13 - 1. passt
 
 Was fehlt:
-es fehlt noch ein Command /rolepanel info, der die Gruppen und den Channel anzeigt
+es fehlt noch ein Command /rolepanel info, der die Gruppen und den Channel anzeigt [erledigt, siehe T14]

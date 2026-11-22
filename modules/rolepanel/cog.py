@@ -249,8 +249,15 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
 
     async def _refresh_panel(self, guild: discord.Guild) -> None:
         """Aktualisiert die Panel-Nachricht, wenn das Panel aktiv ist."""
-        if self.storage.load(guild.id)["active"]:
-            await get_welcome_manager(self.bot).refresh(guild, PROVIDER_KEY)
+        settings = self.storage.load(guild.id)
+        if not settings["active"]:
+            return
+        manager = get_welcome_manager(self.bot)
+        if manager.get_message_id(guild.id, PROVIDER_KEY) is None:
+            # Nachricht wurde manuell gelöscht: ohne Ping neu posten.
+            await manager.publish(guild, PROVIDER_KEY, settings["hierarchy"], ping=False)
+        else:
+            await manager.refresh(guild, PROVIDER_KEY)
 
     @app_commands.command(name="userrole", description="Schaltet Rollen in der Auswahl an oder aus.")
     @app_commands.describe(rolle1="Erste Rolle", rolle2="Weitere Rolle", rolle3="Weitere Rolle",
@@ -412,11 +419,33 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await manager.move_channel(guild, channel)
         await interaction.followup.send(f"Willkommenskanal ist jetzt {channel.mention}.", ephemeral=True)
 
+    @app_commands.command(name="info", description="Zeigt Save-Roles, wählbare Rollen und den Kanal.")
+    async def info(self, interaction: discord.Interaction) -> None:
+        guild = interaction.guild
+        settings = self.storage.load(guild.id)
+        channel = get_welcome_manager(self.bot).get_channel(guild)
+
+        def mentions(ids: list[int]) -> str:
+            roles = [guild.get_role(role_id) for role_id in ids]
+            return ", ".join(role.mention for role in roles if role is not None) or "–"
+
+        lines = [
+            f"**Status:** {'aktiv' if settings['active'] else 'inaktiv'}",
+            f"**Kanal:** {channel.mention if channel is not None else 'nicht gesetzt'}",
+            f"**Sprache:** {settings['language']}",
+            f"**Hierarchie:** {settings['hierarchy']}",
+            f"**Save-Roles:** {mentions(settings['save_role_ids'])}",
+            f"**Wählbare Rollen:** {mentions(settings['user_role_ids'])}",
+        ]
+        await interaction.response.send_message(
+            "\n".join(lines), ephemeral=True, allowed_mentions=discord.AllowedMentions.none()
+        )
+
     @app_commands.command(name="start", description="Postet die Rollenauswahl im Willkommenskanal.")
     async def start(self, interaction: discord.Interaction) -> None:
         guild = interaction.guild
         settings = self.storage.load(guild.id)
-        if settings["active"]:
+        if settings["active"] and get_welcome_manager(self.bot).get_message_id(guild.id, PROVIDER_KEY) is not None:
             await interaction.response.send_message("Die Rollenauswahl ist bereits aktiv.", ephemeral=True)
             return
         selectable = [role_id for role_id in settings["user_role_ids"] if guild.get_role(role_id) is not None]
@@ -475,6 +504,12 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
 
 
     # ------------------------------------------------------------ Listener
+    @commands.Cog.listener()
+    async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent) -> None:
+        """Manuell gelöschte Panel-Nachricht vergessen, damit start/setlanguage sie neu erzeugen."""
+        if payload.guild_id is not None:
+            get_welcome_manager(self.bot).handle_message_deleted(payload.guild_id, payload.message_id)
+
     @commands.Cog.listener()
     async def on_guild_role_delete(self, role: discord.Role) -> None:
         """Gelöschte Rolle aus Auswahl und Save-Roles entfernen und das Panel aktualisieren."""

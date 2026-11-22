@@ -165,6 +165,21 @@ class WelcomeChannelManager:
             await self.arrange(guild)
         return self.storage.load(guild.id)["posts"][key].get("message_id")
 
+    def get_message_id(self, guild_id: int, key: str) -> int | None:
+        """Gespeicherte Message-ID des Anbieters (None = aktuell nicht gepostet)."""
+        post = self.storage.load(guild_id)["posts"].get(key)
+        return post.get("message_id") if isinstance(post, dict) else None
+
+    def handle_message_deleted(self, guild_id: int, message_id: int) -> str | None:
+        """Vergisst die Message-ID einer manuell gelöschten Bot-Nachricht; liefert den Anbieter-Schlüssel."""
+        settings = self.storage.load(guild_id)
+        for key, post in settings["posts"].items():
+            if isinstance(post, dict) and post.get("message_id") == message_id:
+                post["message_id"] = None
+                self.storage.save(guild_id, settings)
+                return key
+        return None
+
     async def refresh(self, guild: discord.Guild, key: str) -> None:
         """Bearbeitet die gepostete Nachricht; fehlt sie, wird sie ohne Ping neu gesendet."""
         channel = self.get_channel(guild)

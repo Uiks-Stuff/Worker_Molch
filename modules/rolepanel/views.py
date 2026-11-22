@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import colorsys
 import logging
 import re
 from typing import Any, Iterable
@@ -24,11 +25,13 @@ class RoleButton(
     weil die Rollen-ID in der `custom_id` steckt.
     """
 
-    def __init__(self, role_id: int, label: str | None = None) -> None:
+    def __init__(
+        self, role_id: int, label: str | None = None, style: discord.ButtonStyle = discord.ButtonStyle.secondary
+    ) -> None:
         super().__init__(
             discord.ui.Button(
                 label=(label or str(role_id))[:MAX_LABEL_LENGTH],
-                style=discord.ButtonStyle.secondary,
+                style=style,
                 custom_id=f"{CUSTOM_ID_PREFIX}{role_id}",
             )
         )
@@ -38,7 +41,7 @@ class RoleButton(
     async def from_custom_id(
         cls, interaction: discord.Interaction, item: discord.ui.Item, match: re.Match[str], /
     ) -> "RoleButton":
-        return cls(int(match["role_id"]), getattr(item, "label", None))
+        return cls(int(match["role_id"]), getattr(item, "label", None), getattr(item, "style", discord.ButtonStyle.secondary))
 
     async def callback(self, interaction: discord.Interaction) -> None:
         cog: Any = interaction.client.get_cog(COG_NAME)
@@ -79,9 +82,25 @@ class MessageModal(discord.ui.Modal, title="Nachricht bearbeiten"):
             )
 
 
+def style_for_role(role: discord.Role) -> discord.ButtonStyle:
+    """Discord kennt nur vier Button-Farben: die Rollenfarbe wird der nächstliegenden zugeordnet."""
+    color = getattr(role, "color", None)
+    if color is None or color.value == 0:
+        return discord.ButtonStyle.secondary
+    hue, saturation, _ = colorsys.rgb_to_hsv(color.r / 255, color.g / 255, color.b / 255)
+    if saturation < 0.15:
+        return discord.ButtonStyle.secondary
+    hue *= 360
+    if hue < 45 or hue >= 300:
+        return discord.ButtonStyle.danger  # rot/orange/rosa
+    if hue < 170:
+        return discord.ButtonStyle.success  # gelb/grün
+    return discord.ButtonStyle.primary  # cyan/blau/violett
+
+
 def build_view(roles: Iterable[discord.Role]) -> discord.ui.View | None:
     """Baut die View mit einem Button pro Rolle (höchstens 25); ohne Rollen None."""
     view = discord.ui.View(timeout=None)
     for role in list(roles)[:MAX_BUTTONS]:
-        view.add_item(RoleButton(role.id, role.name))
+        view.add_item(RoleButton(role.id, role.name, style_for_role(role)))
     return view if view.children else None

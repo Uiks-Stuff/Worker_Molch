@@ -104,6 +104,7 @@ Der Bot postet im Willkommenskanal eine Nachricht mit einem Button pro wählbare
 | `/rolepanel stop` | Entfernt die Nachricht und beendet die Rollenauswahl. |
 | `/rolepanel userrole rolle1:@Rolle [rolle2 … rolle5]` | Schaltet Rollen in der Auswahl an oder aus (je Rolle umschalten). Höchstens 25 Rollen. |
 | `/rolepanel clear` | Entfernt alle Rollen aus der Auswahl. |
+| `/rolepanel info` | Zeigt Status, Kanal, Sprache, Hierarchie, Save-Roles und wählbare Rollen. |
 | `/rolepanel setrole rolle1:@Rolle [rolle2 … rolle5]` | Fügt Save-Roles hinzu: nur diese (sowie Servereigentümer und Administratoren) dürfen die `/rolepanel`-Befehle nutzen. |
 | `/rolepanel removerole rolle1:@Rolle [rolle2 … rolle5]` | Entfernt Save-Roles. |
 | `/rolepanel setlanguage language:DEUTSCH` | Setzt die Sprache der Nachricht (Autocomplete aus der Sprachdatei); die Nachricht im Kanal wird sofort angepasst. |

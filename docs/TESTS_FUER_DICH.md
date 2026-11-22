@@ -73,5 +73,14 @@ Benötigt einen zweiten Anbieter; ersatzweise nur Wert prüfen:
 1. Panel-Nachricht manuell löschen, dann `/rolepanel setlanguage language:deutsch` → Erwartet: Nachricht wird ohne Ping neu gesendet.
 2. Willkommenskanal löschen → Erwartet: Rollenauswahl inaktiv; `/rolepanel start` legt/wählt Kanal neu.
 
+## T14 – Feedback-Korrekturen (Wiederholung)
+Einspielen (Core geändert): `cd /home/uik/projects/Worker_Molch && sudo docker compose up -d --build`
+1. T12-1 wiederholen: Panel-Nachricht manuell löschen, dann `/rolepanel setlanguage language:deutsch` → Erwartet: Nachricht wird ohne Ping neu gesendet.
+2. Nachricht erneut manuell löschen, dann `/rolepanel start` → Erwartet: „Rollenauswahl gestartet“, Nachricht wieder da (kein „bereits aktiv“).
+3. `/rolepanel info` → Erwartet: Status, Kanal, Sprache, Hierarchie, Save-Roles, wählbare Rollen (ohne Pings).
+4. Buttons: Erwartet: Farbe richtig zur Rollenfarbe. Hinweis: Discord erlaubt nur 4 Button-Farben (grau, blau, grün, rot);
+   die Rollenfarbe wird der nächstliegenden zugeordnet (rot/orange/rosa → rot, gelb/grün → grün, cyan/blau/violett → blau, keine/graue Farbe → grau).
+   Nach dem Rebuild einmal `/rolepanel setlanguage` ausführen, damit die Buttons neu gezeichnet werden.
+
 ## T13 – Regression
 1. `/ping`, `/clear`, `/module list`, `/honeypot status` funktionieren wie vorher.

@@ -1,4 +1,4 @@
-STATUS: ARBEITET
+STATUS: WARTE_AUF_FEEDBACK
 
 ## Zuletzt erledigt
 - Plan für Modul `rolepanel` (`docs/PLAN.md`, Aufgaben 1–19) erstellt und vom Nutzer freigegeben.
@@ -6,12 +6,14 @@ STATUS: ARBEITET
   publish/refresh/remove/set_hierarchy/arrange/move_channel).
 - Aufgabe 4: `core/errors.py` (`UserFacingCheckFailure`), Error-Handler in `main.py`, Label `manage_roles`.
 - Aufgaben 5–17: Modul `modules/rolepanel/` komplett (storage, languages, views, cog mit allen 10 Befehlen, Buttons als
-  `DynamicItem`, Modal für `setmessage`, Listener für gelöschte Rollen/Kanäle) + Tests. Bestand: 268 Tests grün.
+  `DynamicItem`, Modal für `setmessage`, Listener für gelöschte Rollen/Kanäle) + Tests. Bestand: 271 Tests grün.
+- Feedback eingearbeitet: manuell gelöschte Panel-Nachricht wird neu erzeugt (Listener + start/setlanguage),
+  `/rolepanel info`, Button-Farbe nach Rollenfarbe (nächstliegende der 4 Discord-Stile). Neuer Test T14.
 - Aufgabe 18: README (Modul `rolepanel`) und `docs/TESTS_FUER_DICH.md` (T1–T13) geschrieben.
 
 ## Nächster Schritt
 - Aufgabe 19 (manuell, Nutzer): zuerst Rebuild (T1: `cd /home/uik/projects/Worker_Molch && sudo docker compose up -d --build`),
-  dann `/module enable modul:rolepanel` und T2–T13 aus `docs/TESTS_FUER_DICH.md` durchführen; Ergebnisse in `docs/FEEDBACK.md`.
+  dann `/module enable modul:rolepanel` und T2–T13 sowie T14 (Wiederholung nach Feedback; erneuter Rebuild nötig) aus `docs/TESTS_FUER_DICH.md` durchführen; Ergebnisse in `docs/FEEDBACK.md`.
 - Danach in neuer Sitzung `/weiter`: Feedback einarbeiten; bei lauter OK → STATUS: FERTIG, Modul nach `docs/archiv/` archivieren.
 
 ## Offene Probleme
