@@ -6,9 +6,10 @@ STATUS: ARBEITET
 - Aufgabe 2: `WelcomeChannelManager` (get/set/ensure_channel, handle_channel_deleted, `get_welcome_manager`) + Tests. Bestand: 132 Tests grün.
 - Aufgabe 3: Anbieter-Registry, publish/refresh/remove/set_hierarchy/arrange/move_channel + Tests. Bestand: 148 Tests grün.
 - Aufgabe 4: `core/errors.py`, Error-Handler in `main.py` (UserFacingCheckFailure, Label manage_roles) + Tests; T1 eingetragen (Rebuild nötig). 153 Tests grün.
+- Aufgabe 5: `modules/rolepanel/storage.py` + Tests. 159 Tests grün.
 
 ## Nächster Schritt
-- Aufgabe 5: `modules/rolepanel/__init__.py`, `storage.py` + Tests (Details in PLAN.md).
+- Aufgabe 6: Sprachdatei `modules/rolepanel/languages.txt` + `languages.py` (Parser, resolve_language, render_panel) + Tests (Details in PLAN.md; Vorlage: `modules/honeypot/languages.py`).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

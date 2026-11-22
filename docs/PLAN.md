@@ -73,7 +73,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **4. Core einbinden (A1/A7)**: `core/errors.py` mit `UserFacingCheckFailure`; Error-Handler in `main.py` zeigt deren Text an
   (Log nur auf Info-Ebene); Label `manage_roles: "Rollen verwalten"` ergänzen.
   *Abnahme:* bestehende Tests grün + Tests für die neue Fehlerbehandlung; T1 in TESTS_FUER_DICH (Rebuild, `/ping` und `/honeypot status` funktionieren weiter).
-- [ ] **5. Rolepanel-Speicher (A4)**: `modules/rolepanel/__init__.py`, `storage.py` (Felder siehe Architektur, Hierarchie Standard 10).
+- [x] **5. Rolepanel-Speicher (A4)**: `modules/rolepanel/__init__.py`, `storage.py` (Felder siehe Architektur, Hierarchie Standard 10).
   *Abnahme:* Tests: Defaults, Roundtrip, Guilds getrennt, unbekannter Schlüssel → Fehler.
 - [ ] **6. Sprachdatei (A5)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft), `[ENGLISH]`, `[FRANCAIS]`; Parser (nur `-`-Zeilen),
   `resolve_language` mit Fallback, `render_panel(text, roles)` (Text + Leerzeile + Rollen als Erwähnungen).
