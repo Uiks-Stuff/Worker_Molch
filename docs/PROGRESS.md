@@ -9,10 +9,11 @@ STATUS: ARBEITET
 - Aufgabe 5: `modules/rolepanel/storage.py` + Tests. 159 Tests grün.
 - Aufgabe 6: `modules/rolepanel/languages.py` + `languages.txt` + Tests (`parse_languages` liefert Text-String je Sprache, `render_panel(text, roles)`). 169 Tests grün.
 - Aufgabe 7: `modules/rolepanel/cog.py` (GroupCog, 10 Platzhalter-Befehle, `render`, Anbieter-An-/Abmeldung, `interaction_check`) + Tests. 184 Tests grün.
-- Aufgabe 8: `setrole`/`removerole` + Tests. 189 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 8: `setrole`/`removerole` + Tests. 189 Tests grün.
+- Aufgabe 9: `userrole`/`clear` (Prüfungen A6, Limit 25, Panel-Update nur wenn aktiv) + Tests. 210 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 9: `userrole`/`clear` in `modules/rolepanel/cog.py` (Prüfungen A6, Limit 25, Panel-Update via `get_welcome_manager(bot).refresh(guild, PROVIDER_KEY)` nur wenn aktiv; `_unique_roles` existiert schon) + Tests (Details in PLAN.md).
+- Aufgabe 10: `modules/rolepanel/views.py` – `DynamicItem` (custom_id `rolepanel:role:<id>`), `bot.add_dynamic_items` in `cog_load`/`remove_dynamic_items` in `cog_unload`; `Rolepanel.render` (cog.py) liefert die View statt `None` + Tests (Details in PLAN.md; bestehender Test `test_render_liefert_standardtext_und_rollen` erwartet noch `view is None` → anpassen).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

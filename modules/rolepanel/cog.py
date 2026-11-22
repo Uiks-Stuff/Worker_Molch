@@ -17,6 +17,19 @@ logger = logging.getLogger("discordbot.rolepanel")
 
 NOT_IMPLEMENTED = "Dieser Befehl ist noch nicht verfügbar."
 PROVIDER_KEY = "rolepanel"
+MAX_USER_ROLES = 25  # Discord erlaubt höchstens 25 Buttons pro Nachricht.
+
+# Rollen mit diesen Rechten dürfen nicht per Button vergeben werden: (Attribut, Anzeigename).
+DANGEROUS_PERMISSIONS = [
+    ("administrator", "Administrator"),
+    ("manage_guild", "Server verwalten"),
+    ("manage_roles", "Rollen verwalten"),
+    ("manage_channels", "Kanäle verwalten"),
+    ("ban_members", "Mitglieder bannen"),
+    ("kick_members", "Mitglieder kicken"),
+    ("manage_messages", "Nachrichten verwalten"),
+    ("mention_everyone", "@everyone erwähnen"),
+]
 
 
 @app_commands.guild_only()
@@ -151,7 +164,31 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
             lines.append("Keine Save-Role: " + ", ".join(role.mention for role in missing))
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
+    @staticmethod
+    def _role_problem(role: discord.Role, interaction: discord.Interaction) -> str | None:
+        """Grund, warum die Rolle nicht wählbar sein darf (Schutz vor Rechteausweitung), sonst None."""
+        guild = interaction.guild
+        if role.is_default() or role.managed:
+            return "@everyone oder von einer Integration/einem Bot verwaltet"
+        dangerous = [label for attribute, label in DANGEROUS_PERMISSIONS if getattr(role.permissions, attribute)]
+        if dangerous:
+            return "hat Admin-/Moderationsrechte (" + ", ".join(dangerous) + ")"
+        if role.position >= guild.me.top_role.position:
+            return "liegt nicht unter meiner höchsten Rolle"
+        user = interaction.user
+        privileged = guild.owner_id == user.id or user.guild_permissions.administrator
+        if not privileged and role.position >= user.top_role.position:
+            return "liegt nicht unter deiner höchsten Rolle"
+        return None
+
+    async def _refresh_panel(self, guild: discord.Guild) -> None:
+        """Aktualisiert die Panel-Nachricht, wenn das Panel aktiv ist."""
+        if self.storage.load(guild.id)["active"]:
+            await get_welcome_manager(self.bot).refresh(guild, PROVIDER_KEY)
+
     @app_commands.command(name="userrole", description="Schaltet Rollen in der Auswahl an oder aus.")
+    @app_commands.describe(rolle1="Erste Rolle", rolle2="Weitere Rolle", rolle3="Weitere Rolle",
+                           rolle4="Weitere Rolle", rolle5="Weitere Rolle")
     async def userrole(
         self,
         interaction: discord.Interaction,
@@ -161,11 +198,58 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         rolle4: discord.Role | None = None,
         rolle5: discord.Role | None = None,
     ) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        current: list[int] = list(self.storage.load(guild.id)["user_role_ids"])
+        added: list[discord.Role] = []
+        removed: list[discord.Role] = []
+        rejected: list[tuple[discord.Role, str]] = []
+        too_many: list[discord.Role] = []
+        for role in self._unique_roles(rolle1, rolle2, rolle3, rolle4, rolle5):
+            if role.id in current:
+                # Entfernen ist immer erlaubt (auch für inzwischen unzulässige Rollen).
+                current.remove(role.id)
+                removed.append(role)
+                continue
+            problem = self._role_problem(role, interaction)
+            if problem:
+                rejected.append((role, problem))
+            elif len(current) >= MAX_USER_ROLES:
+                too_many.append(role)
+            else:
+                current.append(role.id)
+                added.append(role)
+
+        lines = []
+        if added:
+            lines.append("Hinzugefügt: " + ", ".join(role.mention for role in added))
+        if removed:
+            lines.append("Entfernt: " + ", ".join(role.mention for role in removed))
+        for role, problem in rejected:
+            lines.append(f"Nicht erlaubt: {role.mention} – {problem}.")
+        if too_many:
+            lines.append(
+                f"Maximal {MAX_USER_ROLES} Rollen möglich, nicht hinzugefügt: "
+                + ", ".join(role.mention for role in too_many)
+            )
+
+        if added or removed:
+            await interaction.response.defer(ephemeral=True)
+            self.storage.update(guild.id, user_role_ids=current)
+            await self._refresh_panel(guild)
+            await interaction.followup.send("\n".join(lines), ephemeral=True)
+        else:
+            await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
     @app_commands.command(name="clear", description="Entfernt alle Rollen aus der Auswahl.")
     async def clear(self, interaction: discord.Interaction) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        if not self.storage.load(guild.id)["user_role_ids"]:
+            await interaction.response.send_message("Die Auswahl ist bereits leer.", ephemeral=True)
+            return
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(guild.id, user_role_ids=[])
+        await self._refresh_panel(guild)
+        await interaction.followup.send("Alle Rollen wurden aus der Auswahl entfernt.", ephemeral=True)
 
     @app_commands.command(name="setlanguage", description="Setzt die Sprache der Nachricht im Kanal.")
     async def setlanguage(self, interaction: discord.Interaction, language: str) -> None:

@@ -85,7 +85,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   Prüfung: Eigentümer / Admin / Save-Role erlaubt, normales Mitglied und Mitglied mit `manage_roles` ohne Save-Role abgelehnt.
 - [x] **8. `setrole` / `removerole` (A7)**: speichern/entfernen, Duplikate und nicht gesetzte Rollen melden, `@everyone`/verwaltete Rollen ablehnen.
   *Abnahme:* Tests hinzufügen, entfernen, Duplikate, Ablehnungen.
-- [ ] **9. `userrole` / `clear` (A6)**: umschalten mit Prüfungen laut A6, Limit 25; bei aktivem Panel Nachricht aktualisieren
+- [x] **9. `userrole` / `clear` (A6)**: umschalten mit Prüfungen laut A6, Limit 25; bei aktivem Panel Nachricht aktualisieren
   (nach `clear` bleibt das Panel ohne Buttons stehen *(Annahme)*).
   *Abnahme:* Tests: hinzufügen, entfernen, gemischt, jede Ablehnungsregel, Limit, clear, Panel-Update nur wenn aktiv.
 - [ ] **10. Buttons (A8)**: `views.py` – `DynamicItem` (Label = Rollenname, max. 80 Zeichen), Registrierung via `bot.add_dynamic_items`
