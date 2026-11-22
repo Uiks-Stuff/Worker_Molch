@@ -1,6 +1,7 @@
 {
   "enabled_modules": [
     "modules.clear.cog",
-    "modules.honeypot.cog"
+    "modules.honeypot.cog",
+    "modules.rolepanel.cog"
   ]
 }

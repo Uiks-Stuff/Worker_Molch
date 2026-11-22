@@ -18,3 +18,10 @@ Role ...
 Rôle 1
 Rôle 2
 Rôle ...
+
+[ESPANOL]
+- @everyone ¡Hola! ¡Aquí podéis elegir los roles que queráis desempeñar!
+
+Rol 1
+Rol 2
+Rol ...
