@@ -60,7 +60,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **1. Willkommenskanal-Speicher (A2/A4)**: `core/welcome_channel.py` – Speicherklasse für `data/welcome_channel.json`
   (Defaults, laden/speichern pro Guild, atomar).
   *Abnahme:* Tests: fehlende/defekte Datei → Defaults, Roundtrip, Guilds getrennt, `data/` wird angelegt.
-- [ ] **2. Kanalverwaltung (A2/A12)**: `WelcomeChannelManager.get_channel/set_channel/ensure_channel` (vorhandenen „willkommen“
+- [x] **2. Kanalverwaltung (A2/A12)**: `WelcomeChannelManager.get_channel/set_channel/ensure_channel` (vorhandenen „willkommen“
   nutzen, sonst anlegen; `Forbidden` weiterreichen), `handle_channel_deleted` (Kanal + Post-IDs zurücksetzen); Zugriff über
   `get_welcome_manager(bot)` (hängt eine Instanz an den Bot, bleibt bei Modul-Reload erhalten).
   *Abnahme:* Tests: gesetzt / vorhanden (Groß/Klein) / neu angelegt / gelöschter Kanal-ID → Fallback, Kanal gelöscht, gleiche Instanz bei 2 Aufrufen.

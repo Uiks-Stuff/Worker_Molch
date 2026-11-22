@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 from typing import Any
 
+import discord
+
 logger = logging.getLogger("discordbot.welcome")
 
 # Projektwurzel: core/welcome_channel.py -> eine Ebene höher.
@@ -78,3 +80,60 @@ class WelcomeChannelStorage:
         settings.update(changes)
         self.save(guild_id, settings)
         return settings
+
+
+WELCOME_CHANNEL_NAME = "willkommen"
+
+
+class WelcomeChannelManager:
+    """Verwaltet den gemeinsamen Willkommenskanal (ein Kanal pro Guild für alle Module)."""
+
+    def __init__(self, bot: Any, storage: WelcomeChannelStorage | None = None) -> None:
+        self.bot = bot
+        self.storage = storage if storage is not None else WelcomeChannelStorage()
+
+    def get_channel(self, guild: discord.Guild) -> discord.TextChannel | None:
+        """Gibt den gesetzten Kanal zurück oder None (nicht gesetzt bzw. nicht mehr vorhanden)."""
+        channel_id = self.storage.load(guild.id)["channel_id"]
+        if channel_id is None:
+            return None
+        channel = guild.get_channel(channel_id)
+        return channel if isinstance(channel, discord.TextChannel) else None
+
+    def set_channel(self, guild: discord.Guild, channel: discord.TextChannel) -> None:
+        """Setzt den Willkommenskanal (überschreibt einen vorhandenen)."""
+        self.storage.update(guild.id, channel_id=channel.id)
+
+    async def ensure_channel(self, guild: discord.Guild) -> discord.TextChannel:
+        """Liefert den Kanal; sonst vorhandenen „willkommen“ nutzen oder neu anlegen (Forbidden wird weitergereicht)."""
+        channel = self.get_channel(guild)
+        if channel is None:
+            channel = discord.utils.find(
+                lambda c: c.name.lower() == WELCOME_CHANNEL_NAME, guild.text_channels
+            )
+            if channel is None:
+                channel = await guild.create_text_channel(WELCOME_CHANNEL_NAME)
+                logger.info("Willkommenskanal #%s auf Guild %s angelegt.", channel.name, guild.id)
+            self.set_channel(guild, channel)
+        return channel
+
+    def handle_channel_deleted(self, guild_id: int, channel_id: int) -> bool:
+        """Setzt Kanal und Post-IDs zurück, wenn der gelöschte Kanal der Willkommenskanal war."""
+        settings = self.storage.load(guild_id)
+        if settings["channel_id"] != channel_id:
+            return False
+        posts = {}
+        for key, post in settings["posts"].items():
+            if isinstance(post, dict):
+                posts[key] = dict(post, message_id=None)
+        self.storage.update(guild_id, channel_id=None, posts=posts)
+        return True
+
+
+def get_welcome_manager(bot: Any) -> WelcomeChannelManager:
+    """Gibt die Manager-Instanz am Bot zurück (wird einmal angelegt, überlebt Modul-Reloads)."""
+    manager = getattr(bot, "welcome_manager", None)
+    if not isinstance(manager, WelcomeChannelManager):
+        manager = WelcomeChannelManager(bot)
+        bot.welcome_manager = manager
+    return manager
