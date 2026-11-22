@@ -106,7 +106,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **15. `setmessage` (A9)**: Modal (Absatzfeld, vorbefüllt, max. 1800 Zeichen damit Platz für 25 Rollen bleibt), speichern pro Sprache,
   leer → Standard; aktives Panel aktualisieren.
   *Abnahme:* Tests: Modal-Vorbelegung, speichern, zurücksetzen, Panel-Update, Länge.
-- [ ] **16. `sethierarchie` (A3)**: Parameter `ebene` (1–100), speichern, im Manager setzen, Willkommenskanal neu anordnen.
+- [x] **16. `sethierarchie` (A3)**: Parameter `ebene` (1–100), speichern, im Manager setzen, Willkommenskanal neu anordnen.
   *Abnahme:* Tests: Wert gespeichert, Bereichsgrenzen, `arrange` aufgerufen.
 - [ ] **17. Robustheit + Integration (A12/A4)**: Listener `on_guild_role_delete`, `on_guild_channel_delete`; Integrationstest
   start → Klick → Rolle → Sprache wechseln → stop; neues Cog mit gleichen Dateien kennt den Zustand.

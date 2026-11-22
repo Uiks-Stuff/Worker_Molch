@@ -16,7 +16,6 @@ from .views import MessageModal, RoleButton, build_view
 
 logger = logging.getLogger("discordbot.rolepanel")
 
-NOT_IMPLEMENTED = "Dieser Befehl ist noch nicht verfügbar."
 PROVIDER_KEY = "rolepanel"
 MAX_USER_ROLES = 25  # Discord erlaubt höchstens 25 Buttons pro Nachricht.
 
@@ -135,10 +134,7 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
             "Bitte wende dich an einen Administrator."
         )
 
-    # ------------------------------------------------------------ Platzhalter (Aufgaben 8–16)
-    async def _not_implemented(self, interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(NOT_IMPLEMENTED, ephemeral=True)
-
+    # ------------------------------------------------------------ Befehle
     @staticmethod
     def _unique_roles(*roles: discord.Role | None) -> list[discord.Role]:
         """Übergebene Rollen ohne Duplikate und ohne leere Parameter."""
@@ -378,10 +374,17 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await interaction.followup.send(reply, ephemeral=True)
 
     @app_commands.command(name="sethierarchie", description="Setzt die Hierarchieebene des Moduls (Standard 10).")
+    @app_commands.describe(ebene="1–100; kleinere Zahl = weiter oben im Willkommenskanal")
     async def sethierarchie(
         self, interaction: discord.Interaction, ebene: app_commands.Range[int, 1, 100]
     ) -> None:
-        await self._not_implemented(interaction)
+        guild = interaction.guild
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(guild.id, hierarchy=ebene)
+        # Nur bei aktivem Panel gibt es etwas anzuordnen; sonst gilt die Ebene beim nächsten `start`.
+        if self.storage.load(guild.id)["active"]:
+            await get_welcome_manager(self.bot).set_hierarchy(guild, PROVIDER_KEY, ebene)
+        await interaction.followup.send(f"Hierarchieebene auf **{ebene}** gesetzt.", ephemeral=True)
 
     @app_commands.command(name="channel", description="Setzt den gemeinsamen Willkommenskanal.")
     @app_commands.describe(channel="Neuer Willkommenskanal")
