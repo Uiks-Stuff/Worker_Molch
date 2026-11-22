@@ -474,5 +474,29 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
         await interaction.followup.send("Rollenauswahl gestoppt, die Nachricht wurde entfernt.", ephemeral=True)
 
 
+    # ------------------------------------------------------------ Listener
+    @commands.Cog.listener()
+    async def on_guild_role_delete(self, role: discord.Role) -> None:
+        """Gelöschte Rolle aus Auswahl und Save-Roles entfernen und das Panel aktualisieren."""
+        guild = role.guild
+        settings = self.storage.load(guild.id)
+        user_roles = [rid for rid in settings["user_role_ids"] if rid != role.id]
+        save_roles = [rid for rid in settings["save_role_ids"] if rid != role.id]
+        if user_roles == settings["user_role_ids"] and save_roles == settings["save_role_ids"]:
+            return
+        self.storage.update(guild.id, user_role_ids=user_roles, save_role_ids=save_roles)
+        if user_roles != settings["user_role_ids"]:
+            logger.info("Rolle %s aus der Auswahl entfernt (Guild %s: Rolle gelöscht).", role.id, guild.id)
+            await self._refresh_panel(guild)
+
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel: discord.abc.GuildChannel) -> None:
+        """Wurde der Willkommenskanal gelöscht, wird das Panel inaktiv und die Verweise zurückgesetzt."""
+        guild = channel.guild
+        if get_welcome_manager(self.bot).handle_channel_deleted(guild.id, channel.id):
+            logger.info("Willkommenskanal %s gelöscht (Guild %s); Rollenauswahl ist inaktiv.", channel.id, guild.id)
+            self.storage.update(guild.id, active=False)
+
+
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Rolepanel(bot))

@@ -108,7 +108,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   *Abnahme:* Tests: Modal-Vorbelegung, speichern, zurücksetzen, Panel-Update, Länge.
 - [x] **16. `sethierarchie` (A3)**: Parameter `ebene` (1–100), speichern, im Manager setzen, Willkommenskanal neu anordnen.
   *Abnahme:* Tests: Wert gespeichert, Bereichsgrenzen, `arrange` aufgerufen.
-- [ ] **17. Robustheit + Integration (A12/A4)**: Listener `on_guild_role_delete`, `on_guild_channel_delete`; Integrationstest
+- [x] **17. Robustheit + Integration (A12/A4)**: Listener `on_guild_role_delete`, `on_guild_channel_delete`; Integrationstest
   start → Klick → Rolle → Sprache wechseln → stop; neues Cog mit gleichen Dateien kennt den Zustand.
   *Abnahme:* Tests grün.
 - [ ] **18. Doku**: README (Modul `rolepanel`, Befehle, Save-Roles = Zugriff auf Befehle, Bot-Recht „Rollen verwalten“, Bot-Rolle über den wählbaren Rollen,

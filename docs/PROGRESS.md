@@ -17,10 +17,11 @@ STATUS: ARBEITET
 - Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün.
 - Aufgabe 14: `setlanguage` + Autocomplete + Tests. 249 Tests grün.
 - Aufgabe 15: `setmessage` (Modal `MessageModal` in views.py, `apply_message` im Cog) + Tests. 258 Tests grün.
-- Aufgabe 16: `sethierarchie` + Tests; Platzhalter-Code entfernt, alle 10 Befehle implementiert. 261 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 16: `sethierarchie` + Tests; Platzhalter-Code entfernt, alle 10 Befehle implementiert. 261 Tests grün.
+- Aufgabe 17: Listener (Rolle/Kanal gelöscht) + Integrationstests. Alle Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 17: Listener `on_guild_role_delete` (Rolle aus `user_role_ids`/`save_role_ids` entfernen, bei aktivem Panel `_refresh_panel`), `on_guild_channel_delete` (`manager.handle_channel_deleted`; war es der Willkommenskanal → `active=False`) in cog.py + Integrationstest start → Klick → Rolle → Sprache wechseln → stop; neues Cog mit gleichen Dateien kennt Zustand (Details in PLAN.md).
+- Aufgabe 18: Doku – README (Modul `rolepanel`, Befehle, Save-Roles = Zugriff, Bot-Recht „Rollen verwalten“, Bot-Rolle über wählbaren Rollen, Willkommenskanal/Hierarchie für künftige Module) und `docs/TESTS_FUER_DICH.md` vollständig (T1 existiert schon; T2… für alle Befehle/Buttons/Sprache/Kanalwechsel/Hierarchie; Einspielen: Modul → `/module enable rolepanel`; Hinweis, dass `config/modules.json` das Modul noch nicht enthält). Danach Aufgabe 19 = manuell → STATUS: WARTE_AUF_FEEDBACK.
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
