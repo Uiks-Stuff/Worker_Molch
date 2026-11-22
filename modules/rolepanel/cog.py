@@ -12,6 +12,7 @@ from core.welcome_channel import get_welcome_manager
 
 from .languages import LanguageError, resolve_language, render_panel
 from .storage import RolepanelStorage
+from .views import RoleButton, build_view
 
 logger = logging.getLogger("discordbot.rolepanel")
 
@@ -43,9 +44,15 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
     async def cog_load(self) -> None:
         # Als Anbieter im gemeinsamen Willkommenskanal anmelden (überlebt /module reload).
         get_welcome_manager(self.bot).register(PROVIDER_KEY, self.render)
+        self.bot.add_dynamic_items(RoleButton)
 
     async def cog_unload(self) -> None:
         get_welcome_manager(self.bot).unregister(PROVIDER_KEY)
+        self.bot.remove_dynamic_items(RoleButton)
+
+    async def handle_click(self, interaction: discord.Interaction, role_id: int) -> None:
+        """Button-Klick: Rolle geben oder entfernen (Aufgabe 11)."""
+        await self._not_implemented(interaction)
 
     async def render(self, guild: discord.Guild) -> tuple[str, discord.ui.View | None]:
         """Text (und später Buttons) der Panel-Nachricht aus dem gespeicherten Zustand."""
@@ -58,7 +65,8 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
             language = settings["language"]
         text = settings["custom_messages"].get(language) or text
         roles = [guild.get_role(role_id) for role_id in settings["user_role_ids"]]
-        return render_panel(text, [role for role in roles if role is not None]), None
+        roles = [role for role in roles if role is not None]
+        return render_panel(text, roles), build_view(roles)
 
     # ------------------------------------------------------------ Zugriffsprüfung
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
