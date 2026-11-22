@@ -50,6 +50,35 @@ class RoleButton(
         await cog.handle_click(interaction, self.role_id)
 
 
+MAX_MESSAGE_LENGTH = 1800  # lässt Platz für 25 Rollen-Erwähnungen (Discord-Limit 2000 Zeichen)
+
+
+class MessageModal(discord.ui.Modal, title="Nachricht bearbeiten"):
+    """Formular für den eigenen Nachrichtentext der aktuellen Sprache."""
+
+    text = discord.ui.TextInput(
+        label="Text (leer lassen = Standardtext)",
+        style=discord.TextStyle.paragraph,
+        required=False,
+        max_length=MAX_MESSAGE_LENGTH,
+    )
+
+    def __init__(self, cog: Any, current: str) -> None:
+        super().__init__()
+        self.cog = cog
+        self.text.default = current[:MAX_MESSAGE_LENGTH]
+
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        await self.cog.apply_message(interaction, self.text.value or "")
+
+    async def on_error(self, interaction: discord.Interaction, error: Exception) -> None:
+        logger.error("Fehler im Formular „Nachricht bearbeiten“", exc_info=error)
+        if not interaction.response.is_done():
+            await interaction.response.send_message(
+                "Beim Speichern ist ein Fehler aufgetreten. Details stehen im Bot-Log.", ephemeral=True
+            )
+
+
 def build_view(roles: Iterable[discord.Role]) -> discord.ui.View | None:
     """Baut die View mit einem Button pro Rolle (höchstens 25); ohne Rollen None."""
     view = discord.ui.View(timeout=None)

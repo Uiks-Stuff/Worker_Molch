@@ -15,10 +15,11 @@ STATUS: ARBEITET
 - Aufgabe 11: `Rolepanel.handle_click` (geben/entfernen, Fehlerfälle) + Tests. 228 Tests grün.
 - Aufgabe 12: `/rolepanel channel` + Tests. 233 Tests grün.
 - Aufgabe 13: `start`/`stop` + Tests. 244 Tests grün.
-- Aufgabe 14: `setlanguage` + Autocomplete + Tests. 249 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
+- Aufgabe 14: `setlanguage` + Autocomplete + Tests. 249 Tests grün.
+- Aufgabe 15: `setmessage` (Modal `MessageModal` in views.py, `apply_message` im Cog) + Tests. 258 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 15: `setmessage` in cog.py (Modal, Absatzfeld vorbefüllt mit aktuellem Text der gesetzten Sprache, max. 1800 Zeichen, speichern in `custom_messages[SPRACHE]`, leer → Eintrag löschen, `_refresh_panel`) + Tests (Details in PLAN.md). Hinweis: `tests/test_rolepanel_cog.py::test_platzhalter_befehl_antwortet` nutzt `setmessage` als Platzhalter → dort Test entfernen (danach nur noch `sethierarchie` Platzhalter).
+- Aufgabe 16: `sethierarchie` in cog.py (`ebene` 1–100, speichern, `get_welcome_manager(bot).set_hierarchy(guild, PROVIDER_KEY, ebene)` – nur wenn Panel aktiv, sonst nur speichern; `start` übergibt `settings["hierarchy"]` schon) + Tests (Details in PLAN.md). Danach in `tests/test_rolepanel_cog.py` den Test `test_platzhalter_befehl_antwortet` + Konstante `NOT_IMPLEMENTED`/`_not_implemented` entfernen (kein Platzhalter mehr).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`

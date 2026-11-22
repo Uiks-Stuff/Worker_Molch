@@ -103,7 +103,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
   *Abnahme:* Tests: ohne Rollen, Kanal gesetzt / „willkommen“ vorhanden / neu angelegt, Forbidden beim Anlegen, fehlende Rechte, stop, doppelt.
 - [x] **14. `setlanguage` (A11)**: Autocomplete aus Sprachdatei, speichern, aktives Panel aktualisieren.
   *Abnahme:* Tests: gültig (klein geschrieben), ungültig, Autocomplete, Nachricht bearbeitet, eigener Text der neuen Sprache wird verwendet.
-- [ ] **15. `setmessage` (A9)**: Modal (Absatzfeld, vorbefüllt, max. 1800 Zeichen damit Platz für 25 Rollen bleibt), speichern pro Sprache,
+- [x] **15. `setmessage` (A9)**: Modal (Absatzfeld, vorbefüllt, max. 1800 Zeichen damit Platz für 25 Rollen bleibt), speichern pro Sprache,
   leer → Standard; aktives Panel aktualisieren.
   *Abnahme:* Tests: Modal-Vorbelegung, speichern, zurücksetzen, Panel-Update, Länge.
 - [ ] **16. `sethierarchie` (A3)**: Parameter `ebene` (1–100), speichern, im Manager setzen, Willkommenskanal neu anordnen.

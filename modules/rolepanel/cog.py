@@ -12,7 +12,7 @@ from core.welcome_channel import get_welcome_manager
 
 from .languages import LanguageError, language_names, render_panel, resolve_language
 from .storage import RolepanelStorage
-from .views import RoleButton, build_view
+from .views import MessageModal, RoleButton, build_view
 
 logger = logging.getLogger("discordbot.rolepanel")
 
@@ -347,7 +347,35 @@ class Rolepanel(commands.GroupCog, name="rolepanel", description="Rollenauswahl 
 
     @app_commands.command(name="setmessage", description="Bearbeitet den Text der Nachricht im Kanal.")
     async def setmessage(self, interaction: discord.Interaction) -> None:
-        await self._not_implemented(interaction)
+        settings = self.storage.load(interaction.guild.id)
+        try:
+            language, default = resolve_language(settings["language"])
+        except LanguageError:
+            logger.exception("Keine Sprachdatei-Einträge verfügbar.")
+            await interaction.response.send_message(
+                "Die Sprachdatei konnte nicht gelesen werden. Details stehen im Bot-Log.", ephemeral=True
+            )
+            return
+        current = settings["custom_messages"].get(language) or default
+        await interaction.response.send_modal(MessageModal(self, current))
+
+    async def apply_message(self, interaction: discord.Interaction, text: str) -> None:
+        """Speichert den Text aus dem Formular für die aktuelle Sprache (leer/Standard = zurücksetzen)."""
+        guild = interaction.guild
+        settings = self.storage.load(guild.id)
+        language, default = resolve_language(settings["language"])
+        text = text.strip()
+        custom = dict(settings["custom_messages"])
+        if not text or text == default:
+            custom.pop(language, None)
+            reply = f"Der Standardtext für **{language}** wird verwendet."
+        else:
+            custom[language] = text
+            reply = f"Eigener Text für **{language}** gespeichert."
+        await interaction.response.defer(ephemeral=True)
+        self.storage.update(guild.id, custom_messages=custom)
+        await self._refresh_panel(guild)
+        await interaction.followup.send(reply, ephemeral=True)
 
     @app_commands.command(name="sethierarchie", description="Setzt die Hierarchieebene des Moduls (Standard 10).")
     async def sethierarchie(
