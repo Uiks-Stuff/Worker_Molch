@@ -78,7 +78,7 @@ Quelle: `docs/LASTENHEFT.md`. Tests: `.venv/bin/pytest -q` (`tests/`, Mocks mit 
 - [x] **6. Sprachdatei (A5)**: `languages.txt` mit `[DEUTSCH]` (Text aus Lastenheft), `[ENGLISH]`, `[FRANCAIS]`; Parser (nur `-`-Zeilen),
   `resolve_language` mit Fallback, `render_panel(text, roles)` (Text + Leerzeile + Rollen als Erwähnungen).
   *Abnahme:* Tests: Lastenheft-Beispiel inkl. „Rolle 1…“-Platzhalter, mehrzeilig, Kleinschreibung, leerer Abschnitt, Fallback, keine Rollen.
-- [ ] **7. Gerüst + Save-Role-Prüfung (A1/A7)**: `cog.py` mit `GroupCog` `/rolepanel` (`guild_only`, **kein** `default_permissions`),
+- [x] **7. Gerüst + Save-Role-Prüfung (A1/A7)**: `cog.py` mit `GroupCog` `/rolepanel` (`guild_only`, **kein** `default_permissions`),
   alle 10 Befehle als Platzhalter, `setup(bot)`, Anmeldung als Anbieter `rolepanel` beim Laden/Abmelden beim Entladen;
   `interaction_check` des Cogs: Eigentümer, Administrator oder Save-Role → erlaubt, sonst `UserFacingCheckFailure`.
   *Abnahme:* Tests: Befehlsnamen klein und vollständig, Extension lädt (Smoke), Registry an/ab;

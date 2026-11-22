@@ -8,9 +8,10 @@ STATUS: ARBEITET
 - Aufgabe 4: `core/errors.py`, Error-Handler in `main.py` (UserFacingCheckFailure, Label manage_roles) + Tests; T1 eingetragen (Rebuild nötig). 153 Tests grün.
 - Aufgabe 5: `modules/rolepanel/storage.py` + Tests. 159 Tests grün.
 - Aufgabe 6: `modules/rolepanel/languages.py` + `languages.txt` + Tests (`parse_languages` liefert Text-String je Sprache, `render_panel(text, roles)`). 169 Tests grün.
+- Aufgabe 7: `modules/rolepanel/cog.py` (GroupCog, 10 Platzhalter-Befehle, `render`, Anbieter-An-/Abmeldung, `interaction_check`) + Tests. 184 Tests grün. Modul hat jetzt cog.py → `/module` findet es (noch nicht aktivieren, Befehle sind Platzhalter).
 
 ## Nächster Schritt
-- Aufgabe 7: `modules/rolepanel/cog.py` – GroupCog `/rolepanel` mit Platzhalter-Befehlen, `setup(bot)`, Anbieter-Anmeldung, `interaction_check` (Save-Role-Prüfung) + Tests (Details in PLAN.md; Vorlage: `modules/honeypot/cog.py`). Ab jetzt hat das Modul eine cog.py und wird von `/module` gefunden.
+- Aufgabe 8: `setrole`/`removerole` in `modules/rolepanel/cog.py` umsetzen (Platzhalter `_not_implemented` ersetzen) + Tests (Details in PLAN.md).
 
 ## Offene Probleme
 - Einrichtung (falls `.venv` neu): `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt`
